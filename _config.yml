@@ -69,7 +69,7 @@ panelbear_analytics: XXXXXXXXX # panelbear analytics site ID
 # -----------------------------------------------------------------------------
 
 blog_name: Welcom to my AI Journey  # your blog must have a name for it to show up in the nav bar
-blog_description: I like to write blog posts about AI. It could be summaries of interseting articles I read during my research, general topics about artificial intelligence or even technical derivations I use as reference..
+blog_description: I like to write blog posts about AI. It could be summaries of articles I read during my research, general topics about artificial intelligence or technical derivations I use as reference..
 permalink: /blog/:year/:title/
 
 # Pagination
