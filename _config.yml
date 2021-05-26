@@ -131,7 +131,7 @@ plugins:
   - jekyll-github-metadata
   - jekyll-paginate-v2
   - jekyll/scholar
-#  - jekyll-twitter-plugin
+  - jekyll-twitter-plugin
   - jemoji
 
 # Extras
