@@ -2,23 +2,23 @@
 layout: about
 title: about
 permalink: /
-description: <a href="#">Affiliations</a>. Address. Contacts. Moto. Etc.
+description: 
 
 profile:
   align: right
-  image: prof_pic.jpg
-  address: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+  image: prof_pic2.jpg
+#  address: >
+#    <p>Bureau: 33.1.11A</p>
+#    <p>2 rue Conté, Paris, France</p>
 
-news: true  # includes a list of news items
-selected_papers: true # includes a list of papers marked as "selected={true}"
+news: false  # includes a list of news items
+selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com){:target="\_blank"}. You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+I am Research Intern in Deep Learning at CNAM in the <a href="https://cedric2-demo.cnam.fr/equipes/vertigo/">Vertigo Team</a> advised by <a href="https://cedric.cnam.fr/~thomen/">Prof. Nicolas Thome</a> and  <a href="https://chcorbi.github.io/">Charles Corbiere</a>. 
+I am graduated in Applied Mathematics and Computer Science from Sorbonne University (courses from M2 <a href="https://dac.lip6.fr/master/enseignement/master-2/">DAC</a> and <a href="https://m2a.lip6.fr/">M2A</a>) and Telecom SudParis (<a href="https://vap.telecom-sudparis.eu/msa/">MSA</a>).
 
-Put your address / P.O. box / other info right below your picture. You can also disable any these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+I am currently working on Robust and Reliable Uncertainty Estimation for Deep Classifiers with Dirichlet Networks. I have a broad interest in generative models, reinforcement learning, generalization property of deep neural networks and more..
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/){:target="\_blank"} and [Academicons](https://jpswalsh.github.io/academicons/){:target="\_blank"}, like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+I have previously worked as Senior Data Scientist Consultant at <a href="https://www.quinten.ai/">Quinten</a>.
