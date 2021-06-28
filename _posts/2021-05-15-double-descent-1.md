@@ -54,7 +54,7 @@ $$
 
 > This post sets the classical statistical learning framework (following [Statistical Learning course](https://m2a.lip6.fr/premier-semestre/){:target="\_blank"} by [Prof. Gérard Biau](https://www.lpsm.paris/pageperso/biau/){:target="\_blank"}) and introduces the double descent phenomenon.
 >
-> Cross-posted [here](#) as well.
+> Cross-posted [here](https://alexandrethm.github.io/blog/2021/double-descent-1/){:target="\_blank"} as well.
 
 **Double descent: going beyond overfitting with bigger models.**
 In order to avoid overfitting, *conventional wisdom from statistical learning suggests using models that are not too large*, or using regularization techniques to control capacity. Yet, in modern deep learning practice, very large over-parameterized models (typically neural networks) are optimized to fit perfectly the training data and still obtain great generalization performance: *bigger models are better*.
