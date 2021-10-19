@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Deep double descent explained (2/4)
+title: Deep double descent explained (2/4) - Inductive bias of SGD
 description: Inductive biases and the example of gradient descent.
 date: 2021-06-08
 authors:
@@ -559,15 +559,14 @@ $$w_{svm} = \argmin_{w\in\R^d}\norm{w}^2\ \  s.t.\ \  y_i w^T x_i\geq 1, \forall
 > 
 > We can see that as $$g(t) \xrightarrow{}\infty$$ only the samples with
 > the largest exponents in the sum of the right-hand side of
-> the last equation will contribute to the gradient. The
-> exponents are maximized for
+> the last equation will contribute to the gradient. The exponents are maximized for
 > $$i \in \mathcal S = argmin_i\ y_iw_{\infty}^Tx_i$$ which correspond to
 > the samples minimizing the margin: i.e. the support vectors
 > $$X_S = \{x_i, i \in \mathcal S\}$$. The negative gradient
 > $$- \nabla \LL(w_t)$$ would then asymptotically become a non-negative
 > linear combination of support vectors and because
 > $$\norm{w_t}\xrightarrow{}\infty$$ (by [Lemma 15](#lemma:exploding_norm)) the first gradient steps will be
-> negligible and the limit $$w_{\infty}$$ will get closer and closer to a
+> negligible, and the limit $$w_{\infty}$$ will get closer and closer to a
 > non-negative linear combination of support vectors and so will its
 > scaled version $$\hat w = w_{\infty}/\min_i y_iw_{\infty}^Tx_i$$ (the
 > scaling is done to make the margin of the support vectors equal to 1).

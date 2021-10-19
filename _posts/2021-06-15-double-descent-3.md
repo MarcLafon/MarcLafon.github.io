@@ -1,6 +1,6 @@
 ---
 layout: distill
-title: Deep double descent explained (3/4)
+title: Deep double descent explained (3/4) - Two models
 description: The role of inductive biases with two linear examples (linear regression with gaussian noise & Random Fourier Features).
 date: 2021-06-15
 authors:
@@ -357,7 +357,7 @@ We call *Random Fourier Features (RFF)* model any function
 $$h: \mathbb{R}^d \rightarrow \mathbb{R}$$ of the form :
 
 $$
-h(x) = \beta^T z(x)
+h(x) = \sum_{i=1}^{N} \beta_i z_i(x)
 $$
 
 With $$\beta \in \mathbb{R}^N$$ the parameters of the model, and

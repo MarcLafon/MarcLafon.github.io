@@ -1,7 +1,7 @@
 ---
 layout: distill
 title: Deep double descent explained (4/4)
-description: Other related works.
+description: Recent works analyzing over-parameterized regimes.
 date: 2021-06-17
 authors:
   - name: Alexandre Thomas
