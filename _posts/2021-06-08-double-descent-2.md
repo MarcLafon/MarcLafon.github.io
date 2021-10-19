@@ -184,7 +184,7 @@ algebraic expression:
 **Lemma 10**.
 For a matrix $$\mathbf{A} \in \R^{ n\times d}$$,
 $$Im(I\text{-}\mathbf{A}^+\mathbf{A})=Ker(\mathbf{A})$$, $$Ker(\mathbf{A}^+)=Ker(\mathbf{A}^T)$$
-and $$Im(\mathbf{A}^+)=Im(\mathbf{A})$$.
+and $$Im(\mathbf{A}^+)=Im(\mathbf{A^T})$$.
 </div>
 
 > *Proof.* Left to the reader. The proof follows directly from the definition of the pseudo-inverse. ◻
