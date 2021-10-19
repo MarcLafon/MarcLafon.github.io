@@ -372,7 +372,7 @@ is illustrated in the figures below:
 </div>
 
 <div class="caption" markdown=1>
-**Figure 2.** All models are Resnet18s trained on CIFAR-10 with 15% label noise (training labels artificially made incorrect), data-augmentation, and Adam for up to 4K epochs. Taken from [16]
+**Figure 2.** All models are Resnet18s trained on CIFAR-10 with 15% label noise (training labels artificially made incorrect), data-augmentation, and Adam for up to 4K epochs. Taken from from [Nakkiran et al.](){:target="\_blank"} <d-cite key="Nakkiran2019"></d-cite>
 </div>
 
 In the [next blog post]({% post_url 2021-06-08-double-descent-2 %}) we will talk about the role of inductive biases (including gradient descent) in the double descent phenomenon.
