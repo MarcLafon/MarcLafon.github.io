@@ -1,18 +1,20 @@
-"Adams":
-  - firstname: ["Edwin", "E.", "E. P.", "Edwin Plimpton"]
-    url: https://en.wikipedia.org/wiki/Edwin_Plimpton_Adams
+"Lafon":
+  - firstname: ["Marc", "M."]
+    url: https://marclafon.github.io/
 
-"Podolsky":
-  - firstname: ["Boris", "B.", "B. Y.", "Boris Yakovlevich"]
-    url: https://en.wikipedia.org/wiki/Boris_Podolsky
+"Thome":
+  - firstname: ["Nicolas", "N."]
+    url: https://cedric.cnam.fr/~thomen/
 
-"Rosen":
-  - firstname: ["Nathan", "N."]
-    url: https://en.wikipedia.org/wiki/Nathan_Rosen
+"Corbière":
+  - firstname: ["Charles", "C."]
+    url: https://chcorbi.github.io/
 
-"Bach":
-  - firstname: ["Johann Sebastian", "J. S."]
-    url: https://en.wikipedia.org/wiki/Johann_Sebastian_Bach
+"Cord":
+  - firstname: ["Matthieu", "M."]
+    url: https://webia.lip6.fr/~cord/
 
-  - firstname: ["Carl Philipp Emanuel", "C. P. E."]
-    url: https://en.wikipedia.org/wiki/Carl_Philipp_Emanuel_Bach
+
+"Pérez":
+  - firstname: ["Patrick", "P."]
+    url: https://ptrckprz.github.io/
