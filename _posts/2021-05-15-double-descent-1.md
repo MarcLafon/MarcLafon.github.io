@@ -163,7 +163,7 @@ $$
 > *In addition to the approximation error (approximating reality with a
 > model) and estimation error (learning a model with finite data) which
 > fits in the statistical learning framework and are the focus of this
-> lecture, there is actually another source of error, the **optimization
+> post, there is actually another source of error, the **optimization
 > error**. This is the gap between the risk of the predictor returned by
 > the optimization procedure (e.g. SGD) and an empirical risk minimizer $$h_n^*$$.*
 
@@ -255,7 +255,7 @@ $$
 </div>
 
 A complete introduction to Vapnik-Chervonenkis theory is outside the
-scope of this lecture, but [VC-dimension](https://datascience.stackexchange.com/questions/32557/what-is-the-exact-definition-of-vc-dimension) $$V_{\mathcal{H}}$$ can be defined as the
+scope of this post, but [VC-dimension](https://datascience.stackexchange.com/questions/32557/what-is-the-exact-definition-of-vc-dimension) $$V_{\mathcal{H}}$$ can be defined as the
 cardinality of the largest set of points that can be shattered, i.e.
 there is at least one $$h \in \mathcal{H}$$ that can assign all possible
 labels to the set. Combining this result with [proposition 5](#prop:classical-bound)
