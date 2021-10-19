@@ -268,7 +268,7 @@ V_{\mathcal{H}} \leq d+1
 $$
 
 Other measures of the richness of the model class $$\mathcal{H}$$ also
-exist, such as the *Rademacher complexity*, and can be useful in
+exist, such as the [Rademacher complexity](https://en.wikipedia.org/wiki/Rademacher_complexity), and can be useful in
 situations where $$V_{\mathcal{H}} = +\infty$$, or in regression settings.
 
 ### Modern practice
