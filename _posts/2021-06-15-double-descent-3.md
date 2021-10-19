@@ -324,9 +324,8 @@ respect to $$T$$, the risk of the predictor associated to $$\hat w$$ is:
 $$
 \E[(Y-X^T\hat w)^2] =
 \begin{cases}
-\small(\left((1-\frac{p}{d})\norm{w}^2+\sigma^2\right)(1+\frac{p}{n-p-1})) &\quad\text{if } \small(p\leq  n-2)\\
-\small(\norm{w}^2\left(1-\frac{n}{d}(2- \frac{d-n-1}{p-n-1})\right) +\sigma^2(1+\frac{n}{p-n-1})) &\quad\text{if }\small(p\geq n+2)
-
+ \left((1-\frac{p}{d})\norm{w}^2+\sigma^2\right)(1+\frac{p}{n-p-1}) &\quad\text{if } p\leq  n-2\\
+\norm{w}^2\left(1-\frac{n}{d}(2- \frac{d-n-1}{p-n-1})\right) +\sigma^2(1+\frac{n}{p-n-1}) &\quad\text{if } p\geq n+2
 \end{cases}
 $$
 </div>
