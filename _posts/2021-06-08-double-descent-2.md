@@ -596,4 +596,4 @@ explain the double descent behavior of deep learning architectures, and
 recent works such as Gissin et al. (2019)<d-cite key="gissin2019implicit"></d-cite> 
 have been studying the learning dynamics in more complex settings.
 
-The [next blog post]({% post_url 2021-06-15-double-descent-3 %}) explores the link between inductive biases (including gradient descent) and the double descent phenomenon.
+In the [next blog post]({% post_url 2021-06-15-double-descent-3 %}) we will explore two simple models for wich we can analyticaly prove the double descent phenomenon.
