@@ -72,10 +72,7 @@ $$
 
 In this post, we consider two settings where double descent can be
 empirically observed and mathematically justified, in order to give the
-reader some intuition on the role of inductive biases. The [next post]({% post_url 2021-06-17-double-descent-4 %}) concludes with
-some references to recent related works studying optimization in the
-over-parameterized regime, or linking the double descent to a physical
-phenomenon named *jamming*.
+reader some intuition on the role of inductive biases.
 
 Fully understanding the mechanisms behind this phenomenon in deep
 learning remains an open question, but inductive biases (introduced 
@@ -170,7 +167,7 @@ empirical risk minimization we can write:
 <a name="eq:linear_gaussian_erm"></a>
 
 $$
-\min_{z\in \R^d} \frac{1}{2}\norm{\mathbf{X} z - \mathbf{Y}}^2
+\min_{w\in \R^d} \frac{1}{2}\norm{\mathbf{X} w - \mathbf{Y}}^2
 \tag{6}
 $$
 
@@ -193,12 +190,12 @@ Let $$p \in \left[  1, d\right]$$, we are then interested in the
 following sub-problem:
 
 $$
-\min_{z\in \R^p} \frac{1}{2}\norm{\mathbf{\Xp} z - \yp}^2
+\min_{w\in \R^p} \frac{1}{2}\norm{\mathbf{\Xp} w - y}^2
 $$
 
 We have seen in proposition 12 of
 [the previous post]({% post_url 2021-06-08-double-descent-2 %})
-that the least norm solution is $$\p{\hat w}=\mathbf{\Xp}^+\yp$$. If we define $$\q{\hat w} := 0$$ then we will
+that the least norm solution is $$\p{\hat w}=\mathbf{\Xp}^+y$$. If we define $$\q{\hat w} := 0$$ then we will
 consider as a solution of the global problem [(5)](#eq:linear_gaussian)
 $$\hat w:=\phi_p(\p{\hat w},\q{\hat w})$$
 where $$\phi_p: \R^p\times\R^{q}\mapsto \R^d$$ is a map rearranging the
@@ -214,7 +211,7 @@ $$\epsilon \sim \N(0,\sigma^2)$$, and $$w \in \R^d$$. we assume that the
 response variable $$y$$ is defined as $$y=x^Tw +\sigma \epsilon$$. Let
 $$(p,q) \in \left[  1, d\right]^2$$ such that $$p+q=d$$, $$\mathbf{\Xp}$$
 the randomly selected $$p$$ columns sub-matrix of X. Defining
-$$\hat w:=\phi_p(\p{\hat w},\q{\hat w})$$ with $$\p{\hat w}=\mathbf{\Xp}^+\yp$$
+$$\hat w:=\phi_p(\p{\hat w},\q{\hat w})$$ with $$\p{\hat w}=\mathbf{\Xp}^+y$$
 and $$\q{\hat w} = 0$$.
 
 The risk of the predictor associated to $$\hat w$$ is:
@@ -476,3 +473,10 @@ $$
 
 > *Proof.* We refer the reader directly to Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite> for
 > the proof. ◻
+> 
+
+The [next post]({% post_url 2021-06-17-double-descent-4 %}) concludes with
+some references to recent related works studying optimization in the
+over-parameterized regime, or linking the double descent to a physical
+phenomenon named *jamming*.
+
