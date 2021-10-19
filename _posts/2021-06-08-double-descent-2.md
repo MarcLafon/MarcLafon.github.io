@@ -80,7 +80,7 @@ regression in this case).
 
 In the over-parameterized regime, as the complexity of $$\mathcal{H}$$ and
 the EMC increases, the number of interpolating solutions (i.e. achieving
-almost zero training error) increases and the question of the selection
+almost zero training error) increases, and the question of the selection
 of a particular element in $$\text{argmin}_{h \in \mathcal{H}} L_n(h)$$ is
 crucial. Inductive biases, explicit or implicit, are a way to find
 predictors that generalize well.
@@ -98,7 +98,7 @@ For the model class of Random Fourier Features (defined in
 linear regression in the feature space. This bias towards the choice of
 parameters of minimum norm is common to a lot of machine learning model.
 For example, the ridge regression induces a constraint on the $$L_2$$ norm
-of the solution and the lasso regression on the $$L_1$$ norm. We can also
+of the solution, and the lasso regression on the $$L_1$$ norm. We can also
 see the support vector machine (SVM) as a way of inducing a least norm
 bias because maximizing the margin is equivalent to minimizing the norm
 of the parameter under the constraint that all points are well
@@ -187,7 +187,7 @@ $$Im(I\text{-}\mathbf{A}^+\mathbf{A})=Ker(\mathbf{A})$$, $$Ker(\mathbf{A}^+)=Ker
 and $$Im(\mathbf{A}^+)=Im(\mathbf{A})$$.
 </div>
 
-> *Proof.* Left as an exercise. ◻
+> *Proof.* Left to the reader. The proof follows directly from the definition of the pseudo-inverse. ◻
 
 <a name="thm:ls_solutions"></a>
 <div class="theorem l-body-outset" markdown=1>
@@ -257,9 +257,8 @@ norm solution.
 > \end{aligned}
 > $$
 > 
-> using $$(i)$$, $$(ii)$$ and $$(iii)$$ from Definition
-> [\[def:pseudo_inv\]](#def:pseudo_inv){reference-type="ref"
-> reference="def:pseudo_inv"}. Thus, $$(\mathbf{X}^+y)$$ and
+> using $$(i)$$, $$(ii)$$ and $$(iii)$$ from the definition of the pseudo inverse.
+> Thus, $$(\mathbf{X}^+y)$$ and
 > $$(\mathbf{I}-\mathbf{X}^+\mathbf{X})u$$ are orthogonal $$\forall u \in \R^d$$, and
 > applying the Pythagorean theorem gives:
 > 
@@ -559,9 +558,8 @@ $$w_{svm} = \argmin_{w\in\R^d}\norm{w}^2\ \  s.t.\ \  y_i w^T x_i\geq 1, \forall
 > $$
 > 
 > We can see that as $$g(t) \xrightarrow{}\infty$$ only the samples with
-> largest exponents in the sum of the right hand side of
-> ([\[eq:neg_grad\]](#eq:neg_grad){reference-type="ref"
-> reference="eq:neg_grad"}) will contribute to the gradient. But the
+> the largest exponents in the sum of the right-hand side of
+> the last equation will contribute to the gradient. The
 > exponents are maximized for
 > $$i \in \mathcal S = argmin_i\ y_iw_{\infty}^Tx_i$$ which correspond to
 > the samples minimizing the margin: i.e. the support vectors
