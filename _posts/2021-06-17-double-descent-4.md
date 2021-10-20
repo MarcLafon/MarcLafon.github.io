@@ -122,7 +122,7 @@ As illustrated in figure below, the authors are able to quantify
 the location of the jamming transition in the $$(n, N)$$ plane
 (considering $$N$$ as the *effective* number of parameters of the
 network). Considering a fully-connected network with arbitrary depth,
-ReLU activation functions and a dataset of size $$n$$, they give a linear
+ReLU activation functions, and a dataset of size $$n$$, they give a linear
 upper bound on the critical number of parameters $$N^*$$ characterizing
 the jamming transition : $$N^* \leq \frac{1}{C_0} n$$ where $$C_0$$ is a
 constant. In their experiments, it seems that the bound is tight for
@@ -136,7 +136,7 @@ structured data (e.g. MNIST).
 </div>
 <div class="caption" markdown=1>
 $$N$$ : degrees of freedom, $$n$$ : training examples. Inspired from
-Spigler et al. <d-cite key="spigler_jamming_2019"></d-cite>
+Spigler et al. <d-cite key="spigler2018jamming"></d-cite>
 </div>
 
 Similarly to other works, they observe a peak in test error at the
@@ -149,7 +149,7 @@ an ensemble average of networks with $$N$$ slightly beyond $$N^*$$.
 ## Conclusion
 
 From a statistical learning point of view, deep learning is a
-challenging setting to study and some recent empirical successes are not
+challenging setting to study, and some recent empirical successes are not
 yet well understood. The double descent phenomenon, arising from
 well-chosen inductive biases in the over-parameterized regime, has been
 studied in linear settings <d-cite key="Belkin2019"></d-cite> and observed with deep
