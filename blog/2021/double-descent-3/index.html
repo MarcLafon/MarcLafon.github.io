@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Marc  Lafon | Deep double descent explained (3/4) - Two models</title>
+<meta name="description" content="Marc Lafon's Blog. I use this blog to document my learning notes.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡ ️</text></svg>">
+
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2021/double-descent-3/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-XXXXXXXXX');
+  </script>
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    
+    <style type="text/css">
+      .definition {
+    background: rgba(0, 0, 255, 0.05);  # blue
+    color: black;
+    border: 2px solid rgba(0, 0, 255, 0.3);
+    margin: 15pt;
+    margin-bottom: 15pt;
+    padding-top: 10pt;
+    padding-right: 10pt;
+    padding-left: 10pt;
+} .remark {
+    background: rgba(255, 165, 0, 0.05);
+    color: black;
+    border: 2px solid rgba(255, 165, 0, 0.3);
+    margin: 15pt;
+    padding-top: 10pt;
+    padding-right: 10pt;
+    padding-left: 10pt;
+} .theorem {
+    background: rgba(255, 0, 0, 0.05);
+    color: black;
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    margin: 15pt;
+    padding-top: 10pt;
+    padding-right: 10pt;
+    padding-left: 10pt;
+}
+
+    </style>
+    
+  </head>
+
+  <d-front-matter>
+    <script async type="text/json">{
+      "title": "Deep double descent explained (3/4) - Two models",
+      "description": "The role of inductive biases with two linear examples (linear regression with gaussian noise & Random Fourier Features).",
+      "published": "June 15, 2021",
+      "authors": [
+        
+        {
+          "author": "Marc Lafon",
+          "authorURL": "https://marclafon.github.io",
+          "affiliations": [
+            {
+              "name": "Sorbonne University",
+              "url": ""
+            }
+          ]
+        },
+        
+        {
+          "author": "Alexandre Thomas",
+          "authorURL": "https://alexandrethm.github.io/",
+          "affiliations": [
+            {
+              "name": "Mines ParisTech & Sorbonne University",
+              "url": ""
+            }
+          ]
+        }
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  <body class="fixed-top-nav sticky-bottom-footer">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://marclafon.github.io/">
+       <span class="font-weight-bold">Marc</span>   Lafon
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="post distill">
+
+      <d-title>
+        <h1>Deep double descent explained (3/4) - Two models</h1>
+        <p>The role of inductive biases with two linear examples (linear regression with gaussian noise & Random Fourier Features).</p>
+      </d-title>
+
+      <d-byline></d-byline>
+
+      <d-article>
+        \[\require{physics}
+\newcommand{\1}{𝟙}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\newcommand{\Ap}{A_{\sim p}}
+\newcommand{\Aq}{A_{\sim q}}
+\newcommand{\Xp}{X_{\sim p}}
+\newcommand{\Xq}{X_{\sim q}}
+\newcommand{\p}[1]{#1_{\sim p}}
+\newcommand{\q}[1]{#1_{\sim q}}
+\newcommand{\vp}{v_{\sim p}}
+\newcommand{\vq}{v_{\sim q}}
+\newcommand{\xp}{x_{\sim p}}
+\newcommand{\xq}{x_{\sim q}}
+\newcommand{\yp}{y_{\sim p}}
+\newcommand{\yq}{y_{\sim q}}
+\renewcommand{\wp}{w_{\sim p}}
+\newcommand{\wq}{w_{\sim q}}\]
+
+<p>In this post, we consider two settings where double descent can be
+empirically observed and mathematically justified, in order to give the
+reader some intuition on the role of inductive biases.</p>
+
+<p>Fully understanding the mechanisms behind this phenomenon in deep
+learning remains an open question, but inductive biases (introduced 
+in <a href="/blog/2021/double-descent-2/">the previous post</a>) seem to play a
+key role.</p>
+
+<p>In the over-parameterized regime, empirical risk minimizers are able to
+interpolate the data. Intuitively :</p>
+
+<ul>
+  <li>Near the interpolation point, there are very few solutions that fit the training data perfectly. Hence, any noise in the data or model mis-specification will destroy the global structure of the model, leading to an irregular solution that generalizes badly (figure with \(d=20\)).</li>
+  <li>As effective model capacity grows, many more interpolating solutions exist, including some that generalize better and can be selected thanks to the right inductive bias, e.g. smaller norm (figure with \(d=1000\)), or ensemble methods.</li>
+</ul>
+
+<div class="l-page row">
+<div class="col-md-4">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/d1.png" />
+<div class="caption">
+      <p>\(d=1\)</p>
+    </div>
+</div>
+<div class="col-md-4">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/d20.png" />
+<div class="caption">
+      <p>\(d=20\)</p>
+    </div>
+</div>
+<div class="col-md-4">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/d1000.png" />
+<div class="caption">
+      <p>\(d=1000\)</p>
+    </div>
+</div>
+</div>
+<div class="caption">
+  <p>Fitting degree \(d\) Legendre polynomials (orange curve) to \(n=20\) noisy samples (red dots), from a polynomial of degree 3 (blue curve).
+Gradient descent is used to minimize the squared error, which leads to the smallest norm solution (considering the norm of the vector of coefficients). Taken from <a href="https://windowsontheory.org/2019/12/05/deep-double-descent/" target="\_blank">this blog post</a>.</p>
+</div>
+
+<h2 id="linear-regression-with-gaussian-noise">Linear Regression with Gaussian Noise</h2>
+
+<p>In this section we consider the family class
+\((\mathcal{H}_p)_{p\in\left[ 1,d\right]}\) of linear functions
+\(h:\R^d\mapsto \R\) where exactly \(p\) components are non-zero
+(\(1\leq p\leq d\)). We will study the generalization error obtained with
+ERM when increasing \(p\) (which is regarded as the class complexity).</p>
+
+<div class="l-body">
+<div class="col-auto">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/double_descent_gaussian_model.png" />
+</div>
+</div>
+<div class="caption">
+  <p>Plot of risk \(\E[(y-x^T\hat{w})^2]\) as a function of \(p\), under the random selection model of the subset of \(p\) features. Here \(\norm{w}^2=1\),  \(\sigma^2=1/25\), \(d=100\) and \(n=40\). Taken from Belkin et al., 2020 <d-cite key="belkin2020two"></d-cite>.</p>
+</div>
+
+<p>The class of predictors \(\mathcal{H}_p\) is defined as follow:</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 17</strong>.
+For \(p \in \left[ 1,d\right]\), \(\mathcal{H}_p\) is the set of
+functions \(h:\R^d\mapsto \R\) of the form:</p>
+
+\[h(u)=u^Tw,\quad \text{for }u \in \R^d\]
+
+  <p>With \(w \in \R^d\) having
+exactly \(p\) non-zero elements.</p>
+</div>
+
+<p>Let \((X, \mathbf{\epsilon})\in \R^d\times\R\) be independent random
+variables with \(X \sim \N(0,I)\) and
+\(\mathbf{\epsilon} \sim \N(0,\sigma^2)\). Let \(h^* \in \mathcal{H}_d\) and
+define the random variable</p>
+
+\[Y=h^*(X)+\sigma \mathbf{\epsilon}=X^Tw+\sigma \mathbf{\epsilon}\]
+
+<p>with
+\(\sigma&gt;0\) with \(w \in \R^d\) defined by \(h^*\). We consider
+\((X_i, Y_i)_{i=1}^n\) \(n\) iid copies of \((X,Y)\). We are interested in the
+following problem:
+<a name="eq:linear_gaussian"></a></p>
+
+\[\min_{h\in \mathcal{H}_d}\E[(h(X) - Y)^2]
+   \tag{5}\]
+
+<p>Let \(\mathbf{X}\in \R^{n\times d}\) the random matrix which rows are the
+\(X_i^T\) and \(\mathbf{Y} =(Y_1,.., Y_n)^T \in \R^n\). In the following we
+will assume that \(\mathbf{X}\) is full row rank and that \(n \ll d\). Applying
+empirical risk minimization we can write:
+<a name="eq:linear_gaussian_erm"></a></p>
+
+\[\min_{w\in \R^d} \frac{1}{2}\norm{\mathbf{X} w - \mathbf{Y}}^2
+\tag{6}\]
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 18</strong> (Random p-submatrix/p-subvector) <d-footnote>The notation used for the random p-submatrix and random p-subvector is not common and is introduced for clarity.</d-footnote>.
+For any \((p,q) \in \left[  1, d\right]^2\) such that \(p+q=d\) and
+matrix \(\mathbf{A} \in \R^{n\times d}\) and column vector \(v\in \R^d\), we
+will denote by \(\mathbf{\Ap}\) (resp. \(\vp\)) the sub-matrix (resp.
+sub-vector) obtained by randomly selecting a subset of p columns (resp.
+elements), and by \(\mathbf{\Aq} \in \R^{n\times q}\) and \(\vq\in \R^{q}\)
+their discarded counterpart.</p>
+</div>
+
+<p>In order to solve <a href="#eq:linear_gaussian_erm">(6)</a> we will search for a solution in
+\(\mathcal{H}_p \subset \mathcal{H}_d\) and increase \(p\) progressively
+which is a form of structural empirical risk minimization as
+\(\mathcal{H}_p \subset \mathcal{H}_{p+1}\) for any \(p&lt;d\).</p>
+
+<p>Let \(p \in \left[  1, d\right]\), we are then interested in the
+following sub-problem:</p>
+
+\[\min_{w\in \R^p} \frac{1}{2}\norm{\mathbf{\Xp} w - y}^2\]
+
+<p>We have seen in proposition 12 of
+<a href="/blog/2021/double-descent-2/">the previous post</a>
+that the least norm solution is \(\p{\hat w}=\mathbf{\Xp}^+y\). If we define \(\q{\hat w} := 0\) then we will
+consider as a solution of the global problem <a href="#eq:linear_gaussian">(5)</a>
+\(\hat w:=\phi_p(\p{\hat w},\q{\hat w})\)
+where \(\phi_p: \R^p\times\R^{q}\mapsto \R^d\) is a map rearranging the
+terms of \(\p{\hat w}\) and \(\q{\hat w}\) to match the initial indices of
+\(w\).</p>
+
+<p><a name="thm:double_descent_lr"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 19</strong>.
+Let \((x, \epsilon)\in \R^d\times\R\)
+independent random variables with \(x \sim \N(0,I)\) and
+\(\epsilon \sim \N(0,\sigma^2)\), and \(w \in \R^d\). we assume that the
+response variable \(y\) is defined as \(y=x^Tw +\sigma \epsilon\). Let
+\((p,q) \in \left[  1, d\right]^2\) such that \(p+q=d\), \(\mathbf{\Xp}\)
+the randomly selected \(p\) columns sub-matrix of X. Defining
+\(\hat w:=\phi_p(\p{\hat w},\q{\hat w})\) with \(\p{\hat w}=\mathbf{\Xp}^+y\)
+and \(\q{\hat w} = 0\).</p>
+
+  <p>The risk of the predictor associated to \(\hat w\) is:</p>
+
+  <p>\(\E[(y-x^T\hat w)^2] =
+\begin{cases}
+(\norm{\wq}^2+\sigma^2)(1+\frac{p}{n-p-1}) &amp;\quad\text{if } p\leq  n-2\\
++\infty &amp;\quad\text{if }n-1 \leq p\leq  n+1\\
+\norm{\wp}^2(1-\frac{n}{p}) +  (\norm{\wq}^2+\sigma^2)(1+\frac{n}{p-n-1}) &amp;\quad\text{if }p\geq n+2\end{cases}\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> Because \(x\) is zero mean and identity covariance matrix, and
+because \(x\) and \(\epsilon\) are independent:</p>
+
+\[\begin{aligned}
+\E\left[(y-x^T\hat w)^2\right]
+&amp;= \E\left[(x^T(w-\hat w) + \sigma \epsilon)^2\right] \\
+&amp;= \sigma^2 + \E\left[\norm{w-\hat w}^2\right] \\    
+&amp;= \sigma^2 + \E\left[\norm{\wp-\p{\hat w}}^2\right]+\E\left[\norm{\wq-\q{\hat w}}^2\right]
+\end{aligned}\]
+
+  <p>and because \(\q{\hat w}=0\), we have:</p>
+
+\[\E\left[(y-x^T\hat w)^2\right] =  \sigma^2 + \E\left[\norm{\wp-\p{\hat w}}^2\right]+\norm{\wq}^2\]
+
+  <p>The classical regime (\(p\leq n\)) as been treated in Breiman &amp; Freedman, 1983 <d-cite key="breiman1983many"></d-cite>.
+We will then consider the interpolating regime (\(p \geq n\)). Recall that
+X is assumed to be of rank \(n\). Let \(\eta = y - \mathbf{\Xp} \wp\). We can
+write :</p>
+
+\[\begin{aligned}
+    \wp-\p{\hat w} 
+      &amp;= \wp - \mathbf{\Xp}^+y \\
+      &amp;= \wp - \mathbf{\Xp}^+(\eta + \mathbf{\Xp} \wp) \\
+      &amp;= (\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp - \mathbf{\Xp}^+ \eta
+\end{aligned}\]
+
+  <p>It is easy to show (left as an exercise) that
+\((\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\) is the matrix of the orthogonal
+projection on \(\text{Ker}(\mathbf{\Xp})\). Furthermore,
+\(-\mathbf{\Xp}^+ \eta \in \text{Im}(\mathbf{\Xp}^+)=\text{Im}(\mathbf{\Xp}^T)\). Then
+\((\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp\) and \(-\mathbf{\Xp}^+ \eta\) are orthogonal
+and the Pythagorean theorem gives:</p>
+
+\[\norm{\wp-\p{\hat w}}^2 = \norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2 + \norm{\mathbf{\Xp}^+ \eta}^2\]
+
+  <p>We will treat each term of the right hand side of this equality
+separately.</p>
+
+  <ul>
+    <li>
+      <p>\(\norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2\):</p>
+
+      <p>\(\mathbf{\Xp}^+\mathbf{\Xp}\) is the matrix of the orthogonal projection on
+\(\text{Im}(\mathbf{\Xp}^T)=\text{Im}(\mathbf{\Xp}^+)\), then using again the
+Pythagorean theorem gives:</p>
+
+\[\norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2 = \norm{\wp}^2 - \norm{\mathbf{\Xp}^+\mathbf{\Xp}\wp}^2\]
+
+      <p>Because \(\mathbf{\Xp}^+\mathbf{\Xp}\) is the matrix of the orthogonal
+projection on \(\text{Im}(\mathbf{\Xp}^T)\) we can write
+\(\mathbf{\Xp}^+\mathbf{\Xp}\wp\) as a linear combination of rows of \(X_p\),
+then using the fact that the \(x_i\) are i.i.d and of standard normal
+distribution we have:</p>
+
+\[\E[\norm{\mathbf{\Xp}^+\mathbf{\Xp}\wp}^2]
+= \norm{\wp}^2\frac{n}{p}\quad\]
+
+      <p>then</p>
+
+\[\E[\norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2]
+= \norm{\wp}^2(1-\frac{n}{p})\]
+    </li>
+    <li>
+      <p>\(\norm{\mathbf{\Xp}^+ \eta}^2\):</p>
+
+      <p>The calculation of this term used
+the "trace trick" and the notion of distribution of
+inverse-Wishart for pseudo-inverse matrices and is beyond the scope
+of this blog post. It can be shown that:</p>
+
+\[\E[\norm{\mathbf{\Xp}^+ \eta}^2]= \begin{cases}
+(\norm{\wq}^2+\sigma^2)(\frac{n}{p-n-1}) &amp;\quad\text{if } p\geq  n+2\\
++\infty &amp;\quad\text{if }p \in \{n,n+1\}
+\end{cases}\]
+    </li>
+  </ul>
+
+  <p>◻</p>
+</blockquote>
+
+<div class="theorem l-body-outset">
+  <p><strong>Corollary 1</strong>.
+Let \(T\) be a uniformly random subset of \(\left[  1, d\right]\) of
+cardinality p. Under the setting of <a href="#thm:double_descent_lr">Theorem 19</a> and taking the expectation with
+respect to \(T\), the risk of the predictor associated to \(\hat w\) is:</p>
+
+  <p>\(\E[(Y-X^T\hat w)^2] =
+\begin{cases}
+ \left((1-\frac{p}{d})\norm{w}^2+\sigma^2\right)(1+\frac{p}{n-p-1}) &amp;\quad\text{if } p\leq  n-2\\
+\norm{w}^2\left(1-\frac{n}{d}(2- \frac{d-n-1}{p-n-1})\right) +\sigma^2(1+\frac{n}{p-n-1}) &amp;\quad\text{if } p\geq n+2
+\end{cases}\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> Since T is a uniformly random subset of
+\(\left[  1, d\right]\) of cardinality p:</p>
+
+\[\E[\norm{\wp}^2] = \E[\sum_{i\in T}w_i^2]= \E[\sum_{i=1}^{d}w_i^2 \1_{T}(i) ]=\sum_{i=1}^{d}w_i^2 \E[\1_{T}(i) ]=\sum_{i=1}^{d}w_i^2 &gt; \mathbb{P}[i \in T]=\norm{w}^2 \frac{p}{d}\]
+
+  <p>and, similarly:</p>
+
+\[\E[\norm{\wq}^2] =\norm{w}^2 \left(1-\frac{p}{d}\right)\]
+
+  <p>Plugging into <a href="#thm:double_descent_lr">Theorem 19</a> ends the proof. ◻</p>
+</blockquote>
+
+<h2 id="random-fourier-features">Random Fourier Features</h2>
+
+<p>In this section we consider the RFF model family (Rahimi &amp; Recht, 2007 <d-cite key="rahimi2007random"></d-cite>) as our
+class of predictors \(\mathcal{H}_N\).</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 20</strong>.
+We call <em>Random Fourier Features (RFF)</em> model any function
+\(h: \mathbb{R}^d \rightarrow \mathbb{R}\) of the form :</p>
+
+\[h(x) = \sum_{i=1}^{N} \beta_i z_i(x)\]
+
+  <p>With \(\beta \in \mathbb{R}^N\) the parameters of the model, and</p>
+
+\[z(x) = \sqrt{\frac{2}{N}} \begin{bmatrix}\cos(\omega_1^T x + b_1) \\ \vdots \\ \cos(\omega_N^T x + b_N)\end{bmatrix}\]
+
+\[\forall i \in \left[  1,N \right] \begin{cases}\omega_i \sim \mathcal{N}(0, \sigma^2 I_d) \\ b_i \sim \mathcal{U}([0, 2\pi])\end{cases}\]
+
+  <p>The vectors \(\omega_i\) and the scalars \(b_i\) are sampled before fitting
+the model, and \(z\) is called a <em>randomized map</em>.</p>
+</div>
+
+<p>The RFF family is a popular class of models that are linear w.r.t. the
+parameters \(\beta\) but non-linear w.r.t. the input \(x\), and can be seen
+as two-layer neural networks with fixed weights in the first layer. In a
+classification setting, using these models with the hinge loss amounts
+to fitting a linear SVM to \(n\) feature vectors (of dimension \(N\)). RFF
+models are typically used to approximate the Gaussian kernel and reduce
+the computational cost when \(N \ll n\) (e.g. kernel ridge regression when
+using the squared loss and a \(l_2\) regularization term). In our case
+however, we will go beyond \(N=n\) to observe the double descent
+phenomenon.</p>
+
+<blockquote>
+  <p><strong>Remark 7.</strong>
+<em>Clearly, we have \(\mathcal{H}_N \subset \mathcal{H}_{N+1}\) for any
+\(N \geq 0\)</em>.</p>
+</blockquote>
+
+<p>Let \(k:(x,y) \rightarrow e^{-\frac{1}{2\sigma^2}||x-y||^2}\) be the
+Gaussian kernel on \(\mathbb{R}^d\), and let \(\mathcal{H}_{\infty}\) be a
+class of predictors where empirical risk minimizers on
+\(\mathcal{D}_n = \{(x_1, y_1), \dots, (x_n, y_n)\}\) can be expressed as
+\(h: x \rightarrow \sum_{k=1}^n \alpha_k k(x_k, x)\). Then, as
+\(N \rightarrow \infty\), \(\mathcal{H}_N\) becomes a closer and closer
+approximation of \(\mathcal{H}_{\infty}\).</p>
+
+<p>For any \(x, y \in \mathbb{R}^d\), with the vectors
+\(\omega_k \in \mathbb{R}^d\) sampled from \(\mathcal{N}(0, \sigma^2 I_d)\):</p>
+
+\[\begin{aligned}
+k(x,y)  &amp;= e^{-\frac{1}{2\sigma^2}(x-y)^T(x-y)} \\
+        &amp;\overset{(1)}{=} \mathbb{E}_{\omega \sim \mathcal{N}(0, \sigma^2 I_d)}[e^{i \omega^T(x-y)}] \\
+        &amp;= \mathbb{E}_{\omega \sim \mathcal{N}(0, \sigma^2 I_d)}[\cos(\omega^T(x-y))] 
+            &amp; \text{since } k(x,y) \in \mathbb{R} \\
+        &amp;\approx \frac{1}{N} \sum_{k=1}^N \cos(\omega_k^T(x-y)) \\
+        &amp;= \frac{1}{N} \sum_{k=1}^N 2 \cos(\omega_k^T x + b_k) \cos(\omega_k^T y + b_k) \\
+        &amp;\overset{(2)}{=} z(x)^T z(y)
+\end{aligned}\]
+
+<p>Where \((1)\) and \((2)\) are left as an exercise, with
+indications <a href="http://gregorygundersen.com/blog/2019/12/23/random-fourier-features/">here</a> if needed.</p>
+
+<p>Hence, for $h \in \mathcal{H}_{\infty}$ :</p>
+
+\[h(x) = \sum_{k=1}^n \alpha_k k(x_n, x)
+\approx \underbrace{\left(\sum_{k=1}^N \alpha_k z(x_k) \right)^T}_{\beta} z(x)\]
+
+<p>A complete definition is outside the scope of this lecture, but
+\(\mathcal{H}_{\infty}\) is actually the <em>Reproducing Kernel Hilbert Space
+(RKHS)</em> corresponding to the Gaussian kernel, for which RFF models are a
+good approximation when sampling the random vectors \(\omega_i\) from a
+normal distribution.</p>
+
+<p>We use ERM to find the predictor \(h_{n,_N} \in \mathcal{H}_N\) and, in
+the interpolation regime where multiple minimizers exist, we choose the
+one whose parameters \(\beta \in \mathbb{R}^N\) have the smallest \(l_2\)
+norm. This training procedure allows us to observe a model-wise double
+descent (figure below).</p>
+
+<div class="l-body">
+<div class="col-auto">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/double_descent_rff_model.png" />
+</div>
+</div>
+<div class="caption">
+  <p>Model-wise double descent risk curve for RFF model on a subset of MNIST ($n=10^4$, 10 classes), \emph{choosing the smallest norm predictor $h_{n,N}$} when $N &gt; n$. The interpolation threshold is achieved at $N=10^4$. Taken from Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite>, which uses an equivalent but slightly different definition of RFF models.</p>
+</div>
+
+<p>Indeed, in the under-parameterized regime,
+statistical analyses suggest choosing \(N \propto \sqrt{n} \log(n)\) for
+good test risk guarantees <d-cite key="rahimi2007random"></d-cite>. And as we approach the
+interpolation point (around \(N = n\)), we observe that the test risk
+increases then decreases again.</p>
+
+<p>In the over-parameterized regime (\(N \geq n\)), multiple predictors are
+able to fit perfectly the training data. As
+\(\mathcal{H}_N \in \mathcal{H}_{N+1}\), increasing \(N\) leads to richer
+model classes and allows constructing interpolating predictors that are
+more regular, with smaller norm (eventually converging to \(h_{n,\infty}\)
+obtained from \(\mathcal{H}_{\infty}\)). As detailed in <a href="#thm:rff_bound">theorem 22</a> (in a noiseless setting), the small norm
+inductive bias is indeed powerful to ensure small generalization error.</p>
+
+<p><a name="thm:rff_bound"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 22</strong> (Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite>).
+Fix any \(h^* \in \mathcal{H}_{\infty}\). Let \((X_1, Y_1), \dots ,(X_n, Y_n)\) be
+i.i.d. random variables, where \(X_i\) is drawn uniformly at random from a
+compact cube \(\Omega \in \mathbb{R}^d\), and \(Y_i = h^*(X_i)\) for all
+\(i\). There exists constants \(A,B &gt; 0\) such that, for any interpolating
+\(h \in \mathcal{H}_{\infty}\) (i.e., \(h(X_i) = Y_i\) for all \(i\)), so that
+with high probability :</p>
+
+  <p>\(\sup_{x \in \Omega}|h(x) - h^*(x)| &lt; A e^{-B(n/\log n)^{1/d}}
+(||h^*||_{\mathcal{H}_{\infty}} + ||h||_{\mathcal{H}_{\infty}})\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> We refer the reader directly to Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite> for
+the proof. ◻</p>
+
+</blockquote>
+
+<p>The <a href="/blog/2021/double-descent-4/">next post</a> concludes with
+some references to recent related works studying optimization in the
+over-parameterized regime, or linking the double descent to a physical
+phenomenon named <em>jamming</em>.</p>
+
+
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="sticky-bottom mt-5">
+  <div class="container">
+    &copy; Copyright 2022 Marc  Lafon.
+    Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <d-bibliography src="/assets/bibliography/2021-05-double-descent.bib">
+  </d-bibliography>
+
+</html>

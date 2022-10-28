@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Marc  Lafon | Deep double descent explained (2/4) - Inductive bias of SGD</title>
+<meta name="description" content="Marc Lafon's Blog. I use this blog to document my learning notes.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡ ️</text></svg>">
+
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/blog/2021/double-descent-2/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-XXXXXXXXX');
+  </script>
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+    <script src="/assets/js/distillpub/template.v2.js"></script>
+    <script src="/assets/js/distillpub/transforms.v2.js"></script>
+    
+    <style type="text/css">
+      .definition {
+    background: rgba(0, 0, 255, 0.05);  # blue
+    color: black;
+    border: 2px solid rgba(0, 0, 255, 0.3);
+    margin: 15pt;
+    margin-bottom: 15pt;
+    padding-top: 10pt;
+    padding-right: 10pt;
+    padding-left: 10pt;
+} .remark {
+    background: rgba(255, 165, 0, 0.05);
+    color: black;
+    border: 2px solid rgba(255, 165, 0, 0.3);
+    margin: 15pt;
+    padding-top: 10pt;
+    padding-right: 10pt;
+    padding-left: 10pt;
+} .theorem {
+    background: rgba(255, 0, 0, 0.05);
+    color: black;
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    margin: 15pt;
+    padding-top: 10pt;
+    padding-right: 10pt;
+    padding-left: 10pt;
+}
+
+    </style>
+    
+  </head>
+
+  <d-front-matter>
+    <script async type="text/json">{
+      "title": "Deep double descent explained (2/4) - Inductive bias of SGD",
+      "description": "Inductive biases and the example of gradient descent.",
+      "published": "June 8, 2021",
+      "authors": [
+        
+        {
+          "author": "Marc Lafon",
+          "authorURL": "https://marclafon.github.io",
+          "affiliations": [
+            {
+              "name": "Sorbonne University",
+              "url": ""
+            }
+          ]
+        },
+        
+        {
+          "author": "Alexandre Thomas",
+          "authorURL": "https://alexandrethm.github.io/",
+          "affiliations": [
+            {
+              "name": "Mines ParisTech & Sorbonne University",
+              "url": ""
+            }
+          ]
+        }
+        
+      ],
+      "katex": {
+        "delimiters": [
+          {
+            "left": "$",
+            "right": "$",
+            "display": false
+          },
+          {
+            "left": "$$",
+            "right": "$$",
+            "display": true
+          }
+        ]
+      }
+    }</script>
+  </d-front-matter>
+
+  <body class="fixed-top-nav sticky-bottom-footer">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://marclafon.github.io/">
+       <span class="font-weight-bold">Marc</span>   Lafon
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="post distill">
+
+      <d-title>
+        <h1>Deep double descent explained (2/4) - Inductive bias of SGD</h1>
+        <p>Inductive biases and the example of gradient descent.</p>
+      </d-title>
+
+      <d-byline></d-byline>
+
+      <d-article>
+        \[\require{physics}
+    \newcommand{\LL}{\mathcal{L}}
+    \newcommand{\R}{\mathbb{R}}
+    \newcommand{\D}{\mathcal{D}}
+    \newcommand{\Dn}{\mathcal{D}_n}
+    \DeclareMathOperator*{\argmin}{argmin}\]
+
+<h2 id="inductive-biases">Inductive biases</h2>
+
+<p>In the supervised learning problem, the model needs to generalize
+patterns observed in the training data to unseen situations. In that
+sense, the learning procedure has to use mechanisms similar to inductive
+reasoning. As there are generally many possible generalizable solutions,
+Mitchell (1980)<d-cite key="mitchell1980need"></d-cite> advocated the need for inductive biases in learning
+generalization. Inductive biases are assumptions made in order to
+prioritized one solution over another both exhibiting the same
+performance on the training data. For example, a common inductive bias
+is the Occam’s razor principle stating that in case of equally good
+solutions the “simplest” one should be preferred. Another form of
+inductive bias is to incorporate some form of prior knowledge about the
+structure of the data, its generation process or to constrain the model
+to respect specific properties.</p>
+
+<p>In the under-parameterized regime, regularization can be used for
+capacity control and is a form of inductive bias. One common choice is
+to search for small norm solutions, e.g. adding a penalty term, the
+\(L_2\) norm of the weights vector. This is known as Tikhonov
+regularization in the linear regression setting (also known as Ridge
+regression in this case).</p>
+
+<p>In the over-parameterized regime, as the complexity of \(\mathcal{H}\) and
+the EMC increases, the number of interpolating solutions (i.e. achieving
+almost zero training error) increases, and the question of the selection
+of a particular element in \(\text{argmin}_{h \in \mathcal{H}} L_n(h)\) is
+crucial. Inductive biases, explicit or implicit, are a way to find
+predictors that generalize well.</p>
+
+<h3 id="explicit-inductive-biases">Explicit inductive biases</h3>
+
+<p>As illustrated in Belkin et al. (2019) <d-cite key="Belkin2019"></d-cite>, several common
+inductive biases can be used to observe a model-wise double descent (e.g. as the number of
+parameters \(N\) increases).</p>
+
+<h4 id="least-norm">Least Norm</h4>
+
+<p>For the model class of Random Fourier Features (defined in
+<a href="/blog/2021/double-descent-3/">this post</a>, by choosing explicitly the minimum norm
+linear regression in the feature space. This bias towards the choice of
+parameters of minimum norm is common to a lot of machine learning model.
+For example, the ridge regression induces a constraint on the \(L_2\) norm
+of the solution, and the lasso regression on the \(L_1\) norm. We can also
+see the support vector machine (SVM) as a way of inducing a least norm
+bias because maximizing the margin is equivalent to minimizing the norm
+of the parameter under the constraint that all points are well
+classified.</p>
+
+<h4 id="model-architecture">Model architecture</h4>
+
+<p>Another way of inducing a bias is by choosing a particular class of
+functions that we think is well suited for our problem.
+Battaglia et al. (2018) <d-cite key="battaglia2018relational"></d-cite>
+discuss different type of inductive bias
+considered by different type of neural network architectures. Working
+with images it is better to use a convolutional neural network (CNN) as
+it can induce translational equivariance, whereas the recurrent neural
+network (RNN) is better suited to capture long-term dependencies in a
+sequence data. Using a naive Bayes classifier is of great utility if we
+know that the features are independent, etc.</p>
+
+<h4 id="ensembling">Ensembling</h4>
+
+<p>Random forest models use yet another type of inductive bias. By
+averaging potentially non-smooth interpolating trees, the interpolating
+solution has a higher degree of smoothness and generalizes better than
+any individual interpolating tree.</p>
+
+<h3 id="implicit-bias-of-gradient-descent">Implicit Bias of gradient descent</h3>
+
+<p>Gradient descent is a widely used optimization procedure in machine
+learning, and has been observed to converge on solutions that generalize
+surprisingly well, thanks to an implicit inductive bias.</p>
+
+<p>We recall that the gradient descent update rule for parameter \(w\) using
+a loss function \(\LL\) is the following (where \(\eta &gt;0\) is the step
+size):</p>
+
+\[\begin{aligned}
+    w_{k+1} = w_k - \eta \nabla \LL(w)
+\end{aligned}\]
+
+<h3 id="gradient-descent-in-under-determined-least-squares-problem">Gradient descent in under-determined least squares problem</h3>
+
+<p>Consider a non-random dataset \(\{(x_i, y_i)\}_{i=1}^n\), with
+\((x_i, y_i) \in \R^d\times\R\), for \(i \in \{1, \dots ,n\}\) and let
+\(\mathbf{X}\in \R^{n\times d}\) be the matrix which rows are the \(x_i^T\) and
+\(y \in \R^{n}\) the column vector which elements are the \(y_i\). We
+consider the linear least squares:
+<a name="eqn:leastsquare"></a></p>
+
+\[\label{eqn:leastsquare}
+    \min_{w\in \R^d} \LL(w) = \min_{w\in \R^d} \frac{1}{2}\norm{\mathbf{X} w - y}^2
+\tag{1}\]
+
+<p>We will study the property of the solution found using gradient descent.</p>
+
+<p><a name="def:pseudo_inv"></a></p>
+<div class="definition l-body-outset">
+  <p><strong>Definition 9</strong> (Moore-Penrose pseudo-inverse).
+Let \(\mathbf{A} \in \R^{ n\times d}\) be a matrix, the Moore-Penrose
+pseudo-inverse is the only matrix \(\mathbf{A}^{+}\) satisfying the following
+properties:</p>
+
+  <ol>
+    <li>\(\mathbf{A} \mathbf{A}^+ \mathbf{A} = \mathbf{A}\) ,</li>
+    <li>\(\mathbf{A}^+ \mathbf{A} \mathbf{A}^+ = \mathbf{A}^+\) ,</li>
+    <li>\((\mathbf{A}^+\mathbf{A})^T = \mathbf{A}^+\mathbf{A}\) ,</li>
+    <li>\((\mathbf{A}\mathbf{A}^+)^T = \mathbf{A}\mathbf{A}^+\).</li>
+  </ol>
+
+  <p>Furthermore, if \(\rank(\mathbf{A})=\min(n,d)\), then \(\mathbf{A}^+\) has a simple
+algebraic expression:</p>
+
+  <ul>
+    <li>If \(n&lt;d\), then \(\rank(\mathbf{A})=n\) and
+  \(\mathbf{A}^+=\mathbf{A}^T(\mathbf{A}\mathbf{A}^T)^{-1}\)</li>
+    <li>If \(d&lt;n\), then \(\rank(\mathbf{A})=d\) and
+  \(\mathbf{A}^+=(\mathbf{A}^T\mathbf{A})^{-1}\mathbf{A}^T\)</li>
+    <li>If \(d=n\), then \(\mathbf{A}\) is invertible and \(\mathbf{A}^+=\mathbf{A}^{-1}\)</li>
+  </ul>
+</div>
+
+<p><a name="lemma:psdinv_prop"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Lemma 10</strong>.
+For a matrix \(\mathbf{A} \in \R^{ n\times d}\),
+\(Im(I\text{-}\mathbf{A}^+\mathbf{A})=Ker(\mathbf{A})\), \(Ker(\mathbf{A}^+)=Ker(\mathbf{A}^T)\)
+and \(Im(\mathbf{A}^+)=Im(\mathbf{A^T})\).</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> Left to the reader. The proof follows directly from the definition of the pseudo-inverse. ◻</p>
+</blockquote>
+
+<p><a name="thm:ls_solutions"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 11</strong>.
+The set of solutions \(\mathcal{S}_{LS}\) of the least square problem (i.e.
+minimizing <a href="#eqn:leastsquare">(1)</a>) is exactly:</p>
+
+\[\mathcal{S}_{LS} = \{\mathbf{X}^+y + (\mathbf{I}\text{-}\mathbf{X}^+\mathbf{X})u, u\in \R^d\}\]
+
+</div>
+
+<blockquote>
+  <p><em>Proof sketch</em>.</p>
+
+  <p>Writing</p>
+
+\[\mathbf{X} w - y = \mathbf{X} w - \mathbf{X}\mathbf{X}^+y - (\mathbf{I}-\mathbf{X}\mathbf{X}^+)y\]
+
+  <p>proves using pseudo-inverse properties that \(\mathbf{X} w - \mathbf{X}\mathbf{X}^+y\)
+and \((\mathbf{I}-\mathbf{X}\mathbf{X}^+)y\) are orthogonal. Then using the
+Pythagorean theorem:</p>
+
+\[\norm{\mathbf{X} w - y}^2 \geq  \norm{(\mathbf{I}-\mathbf{X}\mathbf{X}^+)y}^2\]
+
+  <p>The inequality being an equality if and only if \(\mathbf{X}w=\mathbf{X}\mathbf{X}^+y\).
+Then \(\mathbf{X}^+y\) is one solution of
+<a href="#eqn:leastsquare">(1)</a> and by <a href="#lemma:psdinv_prop">Lemma 10</a> we can conclude that
+\(\{\mathbf{X}^+y + (\mathbf{I}-\mathbf{X}^+\mathbf{X})u, u\in\R^d\}\) is the set of
+solutions. ○</p>
+</blockquote>
+
+<blockquote>
+  <p><em>Remark 4</em>.
+Depending on the \(\rank\) of \(\mathbf{X}\), the set of solutions
+\(\mathcal{S}_{LS}\) will differ depending on the expression of
+\(\mathbf{X}^+\):</p>
+
+  <ul>
+    <li>If \(n&lt;d\) and \(\rank(\mathbf{X})=n\), then
+  \(\mathbf{X}^+=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}\):
+  \(\mathcal{S}_{LS} = \{\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y +
+  (\mathbf{I}-\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}\mathbf{X})u, u\in\R^d\}\)</li>
+    <li>If \(d&lt;n\) and \(\rank(\mathbf{X})=d\), then
+  \(\mathbf{X}^+=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\):
+  \(\mathcal{S}_{LS} = \{\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y\}\)</li>
+    <li>If \(d=n\) and \(\mathbf{X}\) is invertible, then \(\mathbf{X}^+=\mathbf{X}^{-1}\):
+  \(\mathcal{S}_{LS} = \{\mathbf{X}^{-1}y\}\)</li>
+  </ul>
+</blockquote>
+
+<p><a name="prop:smalestnorm"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Proposition 12</strong>.
+Assuming that \(\mathbf{X}\) has \(\rank n\) and \(n&lt;d\), the least square problem
+<a href="#eqn:leastsquare">(1)</a> has infinitely many solutions and
+\(\mathbf{X}^+y = \mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y\) is the minimum euclidean
+norm solution.</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> From the previous remark, we know that</p>
+
+\[\ \mathcal{S}_{LS} = \{\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y +
+(\mathbf{I}-\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}\mathbf{X})u, u\in\R^d\}\]
+
+  <p>For arbitrary \(u\in \R^d\),</p>
+
+\[\begin{aligned}
+(\mathbf{X}^+y)^T(\mathbf{I}-\mathbf{X}^+\mathbf{X})u 
+    &amp;\overset{\mathrm{(ii)}}{=} (\mathbf{X}^+\mathbf{X}\mathbf{X}^+y)^T(\mathbf{I}-\mathbf{X}^+\mathbf{X})u \\
+    &amp;= (\mathbf{X}^+y)^T(\mathbf{X}^+\mathbf{X})^T(\mathbf{I}-\mathbf{X}^+\mathbf{X})u\\
+    &amp;\overset{\mathrm{(iii)}}{=} (\mathbf{X}^+y)^T\mathbf{X}^+\mathbf{X}(\mathbf{I}-\mathbf{X}^+\mathbf{X})u\\
+    &amp;= (\mathbf{X}^+y)^T\mathbf{X}^+(\mathbf{X}-\mathbf{X}\mathbf{X}^+\mathbf{X})u \overset{\mathrm{(i)}}{=} 0
+\end{aligned}\]
+
+  <p>using \((i)\), \((ii)\) and \((iii)\) from the definition of the pseudo inverse.
+Thus, \((\mathbf{X}^+y)\) and
+\((\mathbf{I}-\mathbf{X}^+\mathbf{X})u\) are orthogonal \(\forall u \in \R^d\), and
+applying the Pythagorean theorem gives:</p>
+
+  <p>\(\begin{aligned}
+\norm{(\mathbf{X}^+y)+(\mathbf{I}-\mathbf{X}^+\mathbf{X})u}^2
+&amp;= \norm{(\mathbf{X}^+y)}^2+\norm{(\mathbf{I}-\mathbf{X}^+\mathbf{X})u}^2 \\
+&amp;\geq \norm{(\mathbf{X}^+y)}^2
+\end{aligned}\)
+◻</p>
+</blockquote>
+
+<p><a name="thm:gd_ls"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 13</strong>.
+If the linear least square problem <a href="#eqn:leastsquare">(1)</a> is under-determined, i.e. \((n&lt;d)\) and
+\(\rank(\mathbf{X})=n\), using gradient descent with a fixed learning rate
+\(0&lt;\eta&lt;\frac{1}{\sigma_{max}(\mathbf{X})}\), where \(\sigma_{max}(\mathbf{X})\) is
+the largest eigenvalue of \(\mathbf{X}\), from an initial point
+\(w_0\in Im(\mathbf{X}^T)\) will converge to the minimum norm solution of
+<a href="#eqn:leastsquare">(1)</a>.</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> As \(\mathbf{X}\) is assumed to be of row rank \(n\), we can write its
+singular value decomposition as :</p>
+
+\[\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T = \mathbf{U} 
+\begin{bmatrix}\mathbf{\Sigma}_1 &amp; 0 \end{bmatrix} \begin{bmatrix}\mathbf{V}_1^T \\ \mathbf{V}_2^T \end{bmatrix}\]
+
+  <p>where \(\mathbf{U}\in \R^{n\times n}\) and \(\mathbf{V}\in \R^{d\times d}\) are
+orthogonal matrices, \(\mathbf{\Sigma} \in \R^{n\times d}\) is a rectangular
+diagonal matrix and \(\mathbf{\Sigma}_1 \in \R^{n\times n}\) is a diagonal
+matrix. The minimum norm solution \(w^*\) can be rewritten as :</p>
+
+\[w^* = \mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y = \mathbf{V}_1 \mathbf{\Sigma}_1^{-1}\mathbf{U}^Ty\]
+
+  <p>The gradient descent update rule is the following (where \(\eta &gt;0\) is
+the step size):</p>
+
+\[\begin{aligned}
+    w_{k+1} = w_k - \eta \nabla \LL(w) \\
+            = w_k - \eta \mathbf{X}^T(\mathbf{X} w_k - y) \\
+            = (\mathbf{I}-\eta \mathbf{X}^T\mathbf{X})w_k + \eta \mathbf{X}^Ty
+\end{aligned}\]
+
+  <p>Then, by induction, we have :</p>
+
+\[w_{k} = (\mathbf{I}-\eta \mathbf{X}^T\mathbf{X})^k w_0 + \eta \sum_{l=0}^{k-1} (\mathbf{I}-\eta \mathbf{X}^T\mathbf{X})^l \mathbf{X}^Ty\\\]
+
+  <p>Using the singular value decomposition of \(\mathbf{X}\), we can see that
+\(\mathbf{X}^T\mathbf{X} = \mathbf{V} \mathbf{\Sigma}^T \mathbf{\Sigma} \mathbf{V}^T\).
+Furthermore, as \(\mathbf{V}\) is orthogonal, \(\mathbf{V}^T\mathbf{V}=\mathbf{I}\).<br />
+Then, the gradient descent iterate at step \(k\) can be written:</p>
+
+\[\begin{aligned}
+    w_k 
+    &amp;= \mathbf{V}(\mathbf{I}-\eta\mathbf{\Sigma}^T\mathbf{\Sigma})^k \mathbf{V}^T w_0 
+        + \eta \mathbf{V} \Big(\sum_{l=0}^{k-1} (\mathbf{I} - 
+                \eta \mathbf{\Sigma}^T \mathbf{\Sigma})^l \mathbf{\Sigma}^T \Big) \mathbf{U}^Ty \\
+    &amp;= \mathbf{V}
+    \begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^k &amp; 0 \\ 
+    0 &amp; \mathbf{I} 
+    \end{bmatrix}
+    \mathbf{V}^T w_0 + \eta \mathbf{V} \Big(\sum_{l=0}^{k-1} 
+    \begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^l \mathbf{\Sigma}_1 \\ 
+    0 
+    \end{bmatrix}
+    \Big) \mathbf{U}^Ty
+\end{aligned}\]
+
+  <p>By choosing
+\(0&lt;\eta&lt;\frac{1}{\sigma_{max}(\mathbf{\Sigma}_1)}\) with
+\(\sigma_{max}(\mathbf{\Sigma}_1)\) the largest eigenvalue of \(\mathbf{\Sigma}_1\),
+we guarantee that the eigenvalues of
+\(\mathbf{I}-\eta\mathbf{\Sigma}^T \mathbf{\Sigma}\) are all strictly less than 1.
+Then:</p>
+
+\[\mathbf{V}\begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^k &amp; 0 \\ 
+    0 &amp; \mathbf{I} 
+ \end{bmatrix} \mathbf{V}^T w_0 \xrightarrow[k\rightarrow \infty]{} \mathbf{V}\begin{bmatrix}
+    0 &amp; 0 \\ 
+    0 &amp; \mathbf{I} 
+ \end{bmatrix} \mathbf{V}^T w_0 = \mathbf{V}_2 \mathbf{V}_2^T w_0\]
+
+  <p>and</p>
+
+\[\eta \sum_{l=0}^{k-1} 
+    \begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^l \mathbf{\Sigma}_1 \\ 
+    0 
+    \end{bmatrix} \xrightarrow[k\rightarrow \infty]{} 
+    \eta  
+    \begin{bmatrix}
+    \sum_{l=0}^{\infty}(\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^l \mathbf{\Sigma}_1 \\ 
+    0 
+    \end{bmatrix} = \begin{bmatrix}
+    \eta (\mathbf{I}- \mathbf{I} + \eta \mathbf{\Sigma}_1^2)^{-1}\mathbf{\Sigma}_1\\ 
+    0 
+    \end{bmatrix} =  \begin{bmatrix}
+    \mathbf{\Sigma}_1^{-1}\\ 
+    0 
+    \end{bmatrix}\]
+
+  <p>Finally, noting \(w_\infty\) the limit of gradient descent iterates we
+have in the limit :</p>
+
+\[\begin{aligned}
+    w_{\infty} &amp;= \mathbf{V}_2 \mathbf{V}_2^T w_0 + \mathbf{V}_1 \mathbf{\Sigma}_1^{-1} \mathbf{U}^Ty \\
+              &amp;= \mathbf{V}_2 \mathbf{V}_2^T w_0 + \mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y \\
+              &amp;= \mathbf{V}_2 \mathbf{V}_2^T w_0 + w^*
+    \end{aligned}\]
+
+  <p>Because \(w_0\) in the range of \(\mathbf{X}^T\), then we can write
+\(w_0 = \mathbf{X}^T z\) for some \(z \in \R^n\).</p>
+
+\[\begin{aligned}
+    \mathbf{V}_2 \mathbf{V}_2^T w_0 = \mathbf{V}\begin{bmatrix}
+                         0 &amp; 0 \\ 
+                         0 &amp; \mathbf{I} 
+                      \end{bmatrix} \mathbf{V}^T \mathbf{X}^Tz \\
+                  &amp;= \mathbf{V}\begin{bmatrix}
+                         0 &amp; 0 \\ 
+                         0 &amp; \mathbf{I} 
+                      \end{bmatrix} \mathbf{V}^T \mathbf{V} \mathbf{\Sigma}^T \mathbf{U}^Tz \\
+                  &amp;= \mathbf{V}\begin{bmatrix}
+                         0 &amp; 0 \\ 
+                         0 &amp; \mathbf{I} 
+                      \end{bmatrix} \begin{bmatrix}\mathbf{\Sigma}_1\\ 0 \end{bmatrix} \mathbf{U}^T=0
+    \end{aligned}\]
+
+  <p>Therefore gradient descent will converge to the minimum norm solution. ◻</p>
+</blockquote>
+
+<h3 id="gradient-descent-on-separable-data">Gradient descent on separable data</h3>
+
+<p>In this section we are concerned with the effect of using gradient
+descent on a classification problem on a linearly separable dataset and
+using a smooth (we will explain in what sens), strictly decreasing and
+non-negative surrogate loss function. For the sake of clarity, we will
+prove the results using the exponential loss function
+\(\ell:x\mapsto e^{-x}\) but the results will be expressed for the more
+general case.</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 14</strong> (Linearly separable dataset).
+A dataset \(\Dn = \{(x_i, y_i)\}_{i=1}^{n}\) where
+\(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\) is
+linearly separable if \(\exists\ w_*\) such that
+\(\forall i: y_i w_*^T x_i &gt; 0\).</p>
+</div>
+
+<p>The results of this section hold assuming the considered loss functions
+respect the following properties :</p>
+
+<div class="theorem l-body-outset">
+  <p><strong>Assumption 1</strong>.
+The loss function \(\ell\) is positive, differentiable, monotonically
+decreasing to zero, (i.e. \(\ell(u)&gt;0\), \(\ell'(u)&lt;0\),
+\(\lim_{u \xrightarrow{}\infty}\ell(u)=\lim_{u \xrightarrow{}\infty}\ell'(u)=0\))
+and \(\lim_{u \xrightarrow{}-\infty}\ell'(u)\neq0\).</p>
+</div>
+
+<div class="theorem l-body-outset">
+  <p><strong>Assumption 2</strong>.
+The gradient of \(\ell\) is \(\beta\)-Lipschitz:</p>
+
+  <p>\(\ \ \forall u,v \in \R, \ \ \norm{\nabla \ell(u) - \nabla \ell(v)}\leq \beta \norm{u-v}.\)</p>
+</div>
+
+<div class="theorem l-body-outset">
+  <p><strong>Assumption 3</strong>.
+Generally speaking a function \(f:\R \mapsto \R\) is said to have a <em>tight
+exponential tail</em> if there exist positive constants c, a, \(\mu_1\),
+\(\mu_2\) and \(u_0\) such that:</p>
+
+\[\forall u &gt;u_0,\ (1-e^{-\mu_1u})\leq c\ f(u) e^{au} \leq (1+e^{-\mu_2u}).\]
+
+  <p>In our case we will say that a differentiable loss function \(\ell\) has a
+<em>tight exponential tail</em> when its negative derivative \(-\ell'\) has a
+tight exponential tail.</p>
+</div>
+
+<div class="l-page row">
+<div class="col-md-6">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/losses.png" />
+<div class="caption">
+      <p>Loss functions</p>
+    </div>
+</div>
+<div class="col-md-6">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/tight_exp_tail_losses.png" />
+<div class="caption">
+      <p>Negative derivatives of the loss functions</p>
+    </div>
+</div>
+</div>
+<div class="caption">
+  <p>Illustration of tight exponential tail property for different common loss functions. We can see that both exponential and logistic loss
+functions have a tight exponential tail. The hinge loss and 0-1 loss functions have been displayed for reference only.</p>
+</div>
+
+<p>We consider the following classification problem:</p>
+
+\[\min_{w\in \R^d} \LL(w) = \min_{w\in \R^d} \sum_{i=1}^{n}\ell(y_i w^T x_i)\]
+
+<p>where \(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\)
+and \(\ell:\R \mapsto \R^*_+\) is a surrogate loss function of the \(0\)-\(1\)
+loss.</p>
+
+<p>We will study the behavior of the solution found by gradient descent
+using a fixed learning rate \(\eta\):</p>
+
+\[w_{t+1} = w_{t} - \eta \nabla \LL(w_t) = w_{t} - \eta \sum_{i=1}^{n}\ell'(y_i w_t^T x_i)y_i x_i\]
+
+<p><a name="lemma:exploding_norm"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Lemma 15</strong>.
+Let \(\D = \{(x_i, y_i)\}_{i=1}^{n}\) be a
+linearly separable dataset where
+\(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\) and
+\(\ell:\R \mapsto \R^*_+\) a loss function under assumptions 1 and 2. Let
+\(w_t\) be the iterates of gradient descent using learning rate
+\(0&lt;\eta&lt;\frac{2}{\beta\sigma^2_{max}(X)}\) and any starting point \(w_0\).
+Then we have:</p>
+
+  <ol>
+    <li>\(\lim_{t \xrightarrow{}\infty}\LL(w_t)=0\),</li>
+    <li>\(\lim_{t \xrightarrow{}\infty}\norm{w_t}=\infty\),</li>
+    <li>\(\forall i: \ \ \lim_{t \xrightarrow{}\infty} y_iw_t^Tx_i=\infty\),</li>
+  </ol>
+
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> As mentioned we use the exponential loss function:
+\(\ell:u \mapsto e^{-u}\), which.<br />
+Since \(\D\) is linearly separable, \(\exists w_*\) such that
+\(w_*^T x_i &gt; 0, \forall i\). Then for \(w \in \R^d\):</p>
+
+\[w_*^T\nabla \LL(w) = \sum_{i=1}^{n}  \underbrace{-exp(-y_i w^T x_i)}_{&lt;0}  \underbrace{y_i w_*^T x_i}_{&gt;0} &lt; 0.\]
+
+  <p>Therefore there is no finite critical points \(w\), for which
+\(\nabla \LL(w)=0\). But gradient descent on a smooth loss with an
+appropriate learning rate is always guaranteed to converge to a critical
+point : in other words \(\nabla \LL(w_t)\xrightarrow{}0\). This
+necessarily implies that \(\norm{w_t}\xrightarrow{}\infty\), which is (2).
+It also implies that \(\exists t_0\) s.t,
+\(\forall t&gt;t_0, \forall i: y_i w_t^T x_i&gt;0\) in order to make the
+exponential term converge to zero, this is (3). But in that case, we
+also have \(\LL(w_t)\xrightarrow{}0\), which is (1). ◻</p>
+</blockquote>
+
+<p>The norm of the previous solution diverges, but we can normalize it to
+have norm 1.</p>
+
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 16.</strong>
+Let \(\D = \{(x_i, y_i)\}_{i=1}^{n}\) be a linearly separable dataset
+where \(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\)
+and \(\ell:\R \mapsto \R^*_+\) a loss function with under assumptions 1, 2
+and 3. Let \(w_t\) be the iterates of gradient descent using a learning
+rate \(\eta\) such that \(0&lt;\eta&lt;\frac{2}{\beta\sigma^2_{max}(X)}\) and any
+starting point \(w_0\). Then we have:</p>
+
+\[\lim_{t \xrightarrow{}\infty}\frac{w_t}{\norm{w_t}}=\frac{w_{svm}}{\norm{w_{svm}}}\]
+
+  <p>where $w_{svm}$ is the solution to the hard margin SVM:</p>
+
+  <p>\(w_{svm} = \argmin_{w\in\R^d}\norm{w}^2\ \  s.t.\ \  y_i w^T x_i\geq 1, \forall i.\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof sketch.</em>
+We will just give the main ideas behind the proof of this theorem using
+the exponential loss function. We will furthermore assume that
+\(\frac{w_t}{\norm{w_t}}\) converges to some limit \(w_{\infty}\). For a
+detailed proof and in the more general case of the loss function having
+properties 1 to 3 please refer to Soudry et al. (2018)<d-cite key="soudry2018implicit"></d-cite>.</p>
+
+  <p>By <a href="#lemma:exploding_norm">Lemma 15</a> we have
+\(\forall i:\ \lim_{t \xrightarrow{}\infty} y_iw_t^Tx_i=\infty\). As
+\(\frac{w_t}{\norm{w_t}}\) converges to \(w_{\infty}\) we can write
+\(w_t = g(t)w_{\infty}+\rho(t)\) such that \(g(t) \xrightarrow{}\infty\),
+\(\forall i:\ y_iw^T_{\infty}x_i &gt;0\) and
+\(\ \lim_{t \xrightarrow{}\infty} \frac{\rho(t)}{g(t)}=0\). The gradient
+can then be written as:</p>
+
+\[\label{eq:neg_grad}
+- \nabla \LL(w_t) = \sum_{i=1}^{n} e^{-y_iw_t^Tx_i}x_i
+                = \sum_{i=1}^{n} e^{-g(t)y_iw_{\infty}^Tx_i}\ e^{-y_i\rho(t)^Tx_i}x_i\]
+
+  <p>We can see that as \(g(t) \xrightarrow{}\infty\) only the samples with
+the largest exponents in the sum of the right-hand side of
+the last equation will contribute to the gradient. The exponents are maximized for
+\(i \in \mathcal S = argmin_i\ y_iw_{\infty}^Tx_i\) which correspond to
+the samples minimizing the margin: i.e. the support vectors
+\(X_S = \{x_i, i \in \mathcal S\}\). The negative gradient
+\(- \nabla \LL(w_t)\) would then asymptotically become a non-negative
+linear combination of support vectors and because
+\(\norm{w_t}\xrightarrow{}\infty\) (by <a href="#lemma:exploding_norm">Lemma 15</a>) the first gradient steps will be
+negligible, and the limit \(w_{\infty}\) will get closer and closer to a
+non-negative linear combination of support vectors and so will its
+scaled version \(\hat w = w_{\infty}/\min_i y_iw_{\infty}^Tx_i\) (the
+scaling is done to make the margin of the support vectors equal to 1).
+We can therefore write:</p>
+
+\[\hat w = \sum_{i=1}^n \alpha_ix_i\quad with\ 
+\left\{
+    \begin{array}{ll}
+        \alpha_ix_i\geq 0 \ and\ y_i\hat w^T x_i=1\ if\ i\in \mathcal S\\
+       \alpha_ix_i= 0 \ and\ y_i\hat w^T x_i&gt;1\ if\ i\notin \mathcal S
+    \end{array}
+\right.\]
+
+  <p>We can recognize the KKT conditions for the hard margin SVM
+problem (see Bishop (2006)<d-cite key="bishop2006pattern"></d-cite> Chapter 7, Section 7.1) and conclude
+that \(\hat w = w_{svm}\). Then
+\(\frac{w_{\infty}}{\norm{w_{\infty}}}=\frac{w_{svm}}{\norm{w_{svm}}}\). ○</p>
+</blockquote>
+
+<p>In the proof of <a href="#lemma:exploding_norm">Lemma 15</a> we have seen that
+\(\LL(w_t)\xrightarrow{}0\). That means that gradient descent converges to
+a global minimum.</p>
+
+<p>Gradient descent has been suspected to induce a bias towards simple
+solutions, not only in these linear settings, but in deep
+learning as well, greatly improving generalization performance. It would
+explain the double descent behavior of deep learning architectures, and
+recent works such as Gissin et al. (2019)<d-cite key="gissin2019implicit"></d-cite> 
+have been studying the learning dynamics in more complex settings.</p>
+
+<p>In the <a href="/blog/2021/double-descent-3/">next blog post</a> we will explore two simple models for wich we can analyticaly prove the double descent phenomenon.</p>
+
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="sticky-bottom mt-5">
+  <div class="container">
+    &copy; Copyright 2022 Marc  Lafon.
+    Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <d-bibliography src="/assets/bibliography/2021-05-double-descent.bib">
+  </d-bibliography>
+
+</html>
