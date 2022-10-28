@@ -7,9 +7,9 @@ description:
 profile:
   align: right
   image: prof_pic2.jpg
-#  address: >
-#    <p>Bureau: 33.1.11A</p>
-#    <p>2 rue Conté, Paris, France</p>
+ address: >
+ <p>Bureau: 37.0E.36</p>
+ <p>2 rue Conté, Paris, France</p>
 
 news: false  # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
