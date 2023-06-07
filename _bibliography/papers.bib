@@ -1,84 +1,54 @@
 ---
 ---
 
-@string{aps = {American Physical Society,}}
-
-@book{einstein1956investigations,
-  bibtex_show={true},
-  title={Investigations on the Theory of the Brownian Movement},
-  author={Einstein, Albert},
-  year={1956},
-  publisher={Courier Corporation},
-  preview={brownian-motion.gif}
+@article{Lafon2023,
+bibtex_show={true},
+author = {Lafon, Marc and Elias, Ramzi and Clément, Rambour and Thome, Nicolas},
+pdf={https://arxiv.org/pdf/2305.16966.pdf},
+journal = {Proceedings of the 40 th International Conference on Machine
+Learning, Honolulu, Hawaii, USA. PMLR 202, 2023},
+title = {{Hybrid Energy Based Model in the Feature Space for Out-of-Distribution Detection}},
+year = {2023},
+abstract={Out-of-distribution (OOD) detection is a critical requirement for the deployment of deep neural networks. This paper introduces the HEAT model, a new post-hoc OOD detection method estimating the density of in-distribution (ID) samples using hybrid energy-based models (EBM) in the feature space of a pre-trained backbone. HEAT complements prior density estimators of the ID density, e.g. parametric models like the Gaussian Mixture Model (GMM), to provide an accurate yet robust density estimation. A second contribution is to leverage the EBM framework to provide a unified density estimation and to compose several energy terms. Extensive experiments demonstrate the significance of the two contributions. HEAT sets new state-of-the-art OOD detection results on the CIFAR-10 / CIFAR100 benchmark as well as on the large-scale Imagenet benchmark. The code is available at: github.com/MarcLafon/heatood.},
+selected={true},
+abbr={ICML}
 }
 
-@article{einstein1950meaning,
-  abbr={AJP},
-  bibtex_show={true},
-  title={The meaning of relativity},
-  author={Einstein, Albert and Taub, AH},
-  journal={American Journal of Physics},
-  volume={18},
-  number={6},
-  pages={403--404},
-  year={1950},
-  publisher={American Association of Physics Teachers}
+@article{Lafon2022,
+bibtex_show={true},
+author = {Lafon, Marc and Clément, Rambour and Thome, Nicolas},
+pdf={},
+journal = {NeurIPS Workshop on Machine Learning Safety},
+title = {{HEAT: Hybrid Energy Based Model in the Feature Space for Out-of-Distribution Detection}},
+year = {2022},
+abstract={In this work, we study the out-of-distribution (OOD) detection problem through the use of the feature space of a pre-trained deep classifier. We show that learning the density of in-distribution (ID) features with an energy-based models (EBM) leads to competitive detection results. However, we found that the non-mixing of MCMC sampling during the EBM's training undermines its detection performance. To overcome this, we introduce HEAT, an energy-based correction of a mixture of class-conditional Gaussian distributions. We show that HEAT obtains favorable results when compared to a strong baseline like the KNN detector on the CIFAR-10\/CIFAR-100 OOD detection benchmarks.},
+selected={false},
+abbr={MLSW}
 }
 
-@article{PhysRev.47.777,
-  abbr={PhysRev},
-  title={Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?},
-  author={Einstein, A. and Podolsky, B. and Rosen, N.},
-  abstract={In a complete theory there is an element corresponding to each element of reality. A sufficient condition for the reality of a physical quantity is the possibility of predicting it with certainty, without disturbing the system. In quantum mechanics in the case of two physical quantities described by non-commuting operators, the knowledge of one precludes the knowledge of the other. Then either (1) the description of reality given by the wave function in quantum mechanics is not complete or (2) these two quantities cannot have simultaneous reality. Consideration of the problem of making predictions concerning a system on the basis of measurements made on another system that had previously interacted with it leads to the result that if (1) is false then (2) is also false. One is thus led to conclude that the description of reality as given by a wave function is not complete.},
-  journal={Phys. Rev.},
-  volume={47},
-  issue={10},
-  pages={777--780},
-  numpages={0},
-  year={1935},
-  month={May},
-  publisher=aps,
-  doi={10.1103/PhysRev.47.777},
-  url={http://link.aps.org/doi/10.1103/PhysRev.47.777},
-  html={https://journals.aps.org/pr/abstract/10.1103/PhysRev.47.777},
-  pdf={example_pdf.pdf},
-  altmetric={248277},
-  dimensions={true},
-  selected={true}
+@article{Corbiere2021,
+bibtex_show={true},
+author = {Corbière, Charles and Lafon, Marc and Thome, Nicolas and Cord, Matthieu and Pérez, Patrick},
+pdf={http://www.gatsby.ucl.ac.uk/{\~}balaji/udl2021/accepted-papers/UDL2021-paper-062.pdf},
+journal = {ICML Workshop on Uncertainty and Robustness in Deep Learning},
+title = {{Beyond First-Order Uncertainty Estimation with Evidential Models for Open-World Recognition}},
+year = {2021},
+abstract={In this paper, we tackle the challenge of jointly quantifying in-distribution and out-of-distribution (OOD) uncertainties. We introduce KLoS, a KL-divergence measure defined on the class-probability simplex. By leveraging the second-order uncertainty representation provided by evi-dential models, KLoS captures more than existing first-order uncertainty measures such as predic-tive entropy. We design an auxiliary neural network , KLoSNet, to learn a refined measure directly aligned with the evidential training objective. Experiments show that KLoSNet acts as a class-wise density estimator and outperforms current uncertainty measures in the realistic context where no OOD data is available during training. We also report comparisons in the presence of OOD training samples, which shed a new light on the impact of the vicinity of this data with OOD test data.},
+selected={true},
+abbr={UDL}
 }
 
-@article{einstein1905molekularkinetischen,
-  title={{\"U}ber die von der molekularkinetischen Theorie der W{\"a}rme geforderte Bewegung von in ruhenden Fl{\"u}ssigkeiten suspendierten Teilchen},
-  author={Einstein, A.},
-  journal={Annalen der physik},
-  volume={322},
-  number={8},
-  pages={549--560},
-  year={1905},
-  publisher={Wiley Online Library}
+@article{Lafon2021,
+bibtex_show={true},
+author = {Lafon, Marc and Thomas, Alexandre},
+pdf={https://marclafon.github.io/assets/pdf/tutorial_deep_double_descent.pdf},
+journal = {},
+title = {{Tutorial on the Double Descent Phenomenon in Deep Learning}},
+year = {2021},
+abstract={Combining empirical risk minimization with capacity control is a classical strategy in machine learning when trying to control the generalization gap and avoid overfitting, as the model class capacity gets larger. Yet, in modern deep learning practice, very large over-parameterized models (e.g. neural networks) are optimized to fit perfectly the training data and still obtain great generalization performance. Past the interpolation point, increasing model complexity seems to actually lower the test error. In this tutorial, we explain the concept of double descent introduced by Belkin et al 2019, and its mechanisms. Section 1 sets the classical statistical learning framework and introduces the double descent phenomenon. By looking at a number of examples, section 2 introduces inductive biases that appear to have a key role in double descent by selecting, among the multiple interpolating solutions, a smooth empirical risk minimizer. Finally, section 3 explores the double descent with two linear models, and gives other points of view from recent related works.},
+selected={false},
+abbr={arxiv}
 }
 
-@article{einstein1905movement,
-  abbr={Ann. Phys.},
-  title={Un the movement of small particles suspended in statiunary liquids required by the molecular-kinetic theory 0f heat},
-  author={Einstein, A.},
-  journal={Ann. Phys.},
-  volume={17},
-  pages={549--560},
-  year={1905}
-}
 
-@article{einstein1905electrodynamics,
-  title={On the electrodynamics of moving bodies},
-  author={Einstein, A.},
-  year={1905}
-}
 
-@book{przibram1967letters,
-  bibtex_show={true},
-  title={Letters on wave mechanics},
-  author={Einstein, Albert and Schrödinger, Erwin and Planck, Max and Lorentz, Hendrik Antoon and Przibram, Karl},
-  year={1967},
-  publisher={Vision},
-  preview={wave-mechanics.gif}
-}
