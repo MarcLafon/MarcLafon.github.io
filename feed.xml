@@ -1,2 +1,1426 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://marclafon.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://marclafon.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-07T09:58:06+00:00</updated><id>https://marclafon.github.io/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://marclafon.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://marclafon.github.io//" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-07T12:12:33+00:00</updated><id>https://marclafon.github.io//feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Deep double descent explained (4/4)</title><link href="https://marclafon.github.io//blog/2021/double-descent-4/" rel="alternate" type="text/html" title="Deep double descent explained (4/4)" /><published>2021-06-17T00:00:00+00:00</published><updated>2021-06-17T00:00:00+00:00</updated><id>https://marclafon.github.io//blog/2021/double-descent-4</id><content type="html" xml:base="https://marclafon.github.io//blog/2021/double-descent-4/"><![CDATA[\[\newcommand{\Dn}{\mathcal{D}_n}
+    \newcommand{\R}{\mathbb{R}}
+    \newcommand{\LL}{\mathcal{L}}\]
+
+<h2 id="optimization-in-the-over-parameterized-regime">Optimization in the over-parameterized regime</h2>
+
+<p>For reasons that are still active research, overparameterization
+seems beneficial not only in the statistical learning framework, but
+from an optimization standpoint as well as it facilitates convergence to
+global minima, in particular with the gradient descent procedures.</p>
+
+<p>The optimization problem can be framed as minimizing a certain loss
+function \(\LL(w)\) with respect to its parameters \(w \in \mathbb{R}^N\),
+such as the square loss \(\LL(w) = \frac{1}{2} \sum_{i=1}^n (f(x_i, w) - y_i)^2\) where
+\(\{(x_i, y_i)\}_{i=1}^{n}\) is our given training dataset and
+\(f : (\mathbb{R}^d \times \mathbb{R}^N) \rightarrow \mathbb{R}\) is our
+model.</p>
+
+<blockquote>
+  <p><strong>Exercise 2</strong>.
+Assume that \(\ell: \mathcal{Y} \rightarrow \mathbb{R}\) is convex and
+\(f : \mathcal{X} \rightarrow \mathcal{Y}\) is linear. Show that
+\(\ell \circ f\) is convex.</p>
+</blockquote>
+
+<p>When \(f\) is non-linear however (which is habitually the case in deep
+learning) the landscape of the loss function is generally non-convex.
+Therefore, first order methods such as GD or SGD are likely to converge
+and get trapped in spurious local minima, depending on the
+initialization. Yet, in the over-parameterized regime where there are
+multiple global minima interpolating almost perfectly the data, it seems
+that SGD has no problem converging to these solutions, despite the
+highly non-convex setting. Recent works are trying to explain this
+phenomenon.</p>
+
+<p>For instance, Oymak &amp; Soltanolkotabi (2020)<d-cite key="oymak2020toward"></d-cite>
+shows that, for one-hidden layer neural
+networks that <em>(1)</em> have smooth activation functions, <em>(2)</em> are
+over-parameterized, i.e. \(N \geq C n^2\) where C depends on the
+distribution of the data and <em>(3)</em> are initialized with i.i.d.
+\(\mathcal{N}(0,1)\) entries, then with high probability GD converges
+quickly to a global optimum. Similar results also hold for ReLU
+activation functions and for SGD.</p>
+
+<p>In Liu et al. (2020)<d-cite key="liu2020toward"></d-cite>, the authors show that sufficiently over-parameterized
+systems, including wide neural networks, generally satisfy a condition
+that allows gradient descent to converge efficiently, for a broad class
+of problems. They use the PL-condition (from Polyak and Lojasiewicz <d-cite key="polyak1963gradient"></d-cite>)
+ which does not require convexity but is sufficient for efficient minimization by GD. One key point is that the
+loss function \(\LL(w)\) is generally non-convex in the neighborhood of
+minimizers. Due to the over-parameterization, the Hessian matrices
+\(\nabla^2 \LL(w)\) are positive semi-definite but not positive definite
+in these neighborhoods, which is incompatible with convexity for
+non-linear sets of solutions. This is in contrast to the
+under-parameterized landscape which generally has multiple isolated
+local minima with positive definite Hessian matrices. Figure
+below illustrates this.</p>
+
+<div class="l-page">
+<div class="col-auto">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/loss_landscape.png" />
+</div>
+</div>
+<div class="caption">
+  <p><em>Left :</em> Loss landscape of under-parameterized models, locally convex
+at local minima. <em>Right :</em> Loss landscape of over-parameterized models,
+incompatible with local convexity. Taken from
+Liu et al. (2020)<d-cite key="liu2020toward"></d-cite></p>
+</div>
+
+<p>In addition to better convergence guarantees, over-parameterization can
+even accelerate optimization. By working with <em>linear</em> neural networks
+(hence fixed expressiveness), Arora et al. (2018)<d-cite key="arora2018optimization"></d-cite> 
+finds that increasing depth
+has an implicit effect on gradient descent, combining certain forms of
+<em>momentum</em> and <em>adaptive learning rates</em> (two well-known tools in the
+field of optimization). They observe the acceleration for non-linear
+networks as well (replacing weight matrices by a product of matrices,
+for fixed expressiveness), and even when using explicit acceleration
+methods such as Adam.</p>
+
+<h2 id="neural-networks-as-a-physical-system--the-jamming-transition">Neural networks as a physical system : the jamming transition</h2>
+
+<p>In order to study the loss landscape, Spigler et al. (2019)<d-cite key="spigler_jamming_2019"></d-cite> make an
+analogy between neural networks and complex physical systems with
+non-convex energy landscape, called glassy systems. Indeed, the loss
+function can be interpreted as the potential energy of the system \(f\),
+with a large number of parameters \(N\) (degrees of freedom). By
+considering the hinge loss, the minimization of \(\LL(w;\Dn)\) actually
+amounts to a constraint-classification problem (with \(n\) constraints,
+\(N\) continuous degrees of freedom), already studied in physics.</p>
+
+<p>Using this analogy, they show that the behavior of deep networks near
+the interpolation point is similar to the behavior of some granular
+systems, that undergo a critical <em>jamming transition</em> when their density
+increases such that they are forced to be in contact one another. In the
+under-parameterized regime, not all the training examples can be
+classified correctly, which leads to unsatisfied constraints. But in the
+over-parameterized regime, there is no stable local minima : the network
+reaches a global minima zero training loss.</p>
+
+<p>As illustrated in figure below, the authors are able to quantify
+the location of the jamming transition in the \((n, N)\) plane
+(considering \(N\) as the <em>effective</em> number of parameters of the
+network). Considering a fully-connected network with arbitrary depth,
+ReLU activation functions, and a dataset of size \(n\), they give a linear
+upper bound on the critical number of parameters \(N^*\) characterizing
+the jamming transition : \(N^* \leq \frac{1}{C_0} n\) where \(C_0\) is a
+constant. In their experiments, it seems that the bound is tight for
+random data but that \(N^*\) increases sub-linearly with \(n\) for
+structured data (e.g. MNIST).</p>
+
+<div class="l-body">
+<div class="col-auto">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/jamming-transition.png" />
+</div>
+</div>
+<div class="caption">
+  <p>\(N\) : degrees of freedom, \(n\) : training examples. Inspired from
+Spigler et al. <d-cite key="spigler2018jamming"></d-cite></p>
+</div>
+
+<p>Similarly to other works, they observe a peak in test error at the
+jamming transition. In Geiger et al. (2020)<d-cite key="geiger2020scaling"></d-cite>,
+using the same setting of fixed-depth fully-connected networks, they argue that this may be due to
+\(||f||\) diverging near the interpolation point \(N=N^*\). Interestingly,
+they also observe that near-optimal generalization can be obtained using
+an ensemble average of networks with \(N\) slightly beyond \(N^*\).</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>From a statistical learning point of view, deep learning is a
+challenging setting to study, and some recent empirical successes are not
+yet well understood. The double descent phenomenon, arising from
+well-chosen inductive biases in the over-parameterized regime, has been
+studied in linear settings <d-cite key="Belkin2019"></d-cite> and observed with deep
+networks <d-cite key="Nakkiran2019"></d-cite>.</p>
+
+<p>In addition to the references presented in this post, other lines of work seem promising.
+Notably, <d-cite key="gissin2019implicit"></d-cite> <d-cite key="neyshabur2015path"></d-cite> <d-cite key="soudry2018implicit"></d-cite> <d-cite key="gunasekar2018implicit"></d-cite>
+are working towards a better understanding of the implicit bias induced
+by optimization algorithms. Finally, we refer the reader to <a href="http://misha.belkin-wang.org" target="\_blank">subsequent
+works of Belkin et al.</a> such as <d-cite key="chen2020multiple"></d-cite>,
+that finds <em>multiple descent</em> curves with an arbitrary number of peaks, due to the
+interaction between the properties of the data and the inductive biases
+of learning algorithms.</p>]]></content><author><name>Alexandre Thomas</name></author><summary type="html"><![CDATA[Recent works analyzing over-parameterized regimes.]]></summary></entry><entry><title type="html">Deep double descent explained (3/4) - Two models</title><link href="https://marclafon.github.io//blog/2021/double-descent-3/" rel="alternate" type="text/html" title="Deep double descent explained (3/4) - Two models" /><published>2021-06-15T00:00:00+00:00</published><updated>2021-06-15T00:00:00+00:00</updated><id>https://marclafon.github.io//blog/2021/double-descent-3</id><content type="html" xml:base="https://marclafon.github.io//blog/2021/double-descent-3/"><![CDATA[\[\require{physics}
+\newcommand{\1}{𝟙}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\newcommand{\Ap}{A_{\sim p}}
+\newcommand{\Aq}{A_{\sim q}}
+\newcommand{\Xp}{X_{\sim p}}
+\newcommand{\Xq}{X_{\sim q}}
+\newcommand{\p}[1]{#1_{\sim p}}
+\newcommand{\q}[1]{#1_{\sim q}}
+\newcommand{\vp}{v_{\sim p}}
+\newcommand{\vq}{v_{\sim q}}
+\newcommand{\xp}{x_{\sim p}}
+\newcommand{\xq}{x_{\sim q}}
+\newcommand{\yp}{y_{\sim p}}
+\newcommand{\yq}{y_{\sim q}}
+\renewcommand{\wp}{w_{\sim p}}
+\newcommand{\wq}{w_{\sim q}}\]
+
+<p>In this post, we consider two settings where double descent can be
+empirically observed and mathematically justified, in order to give the
+reader some intuition on the role of inductive biases.</p>
+
+<p>Fully understanding the mechanisms behind this phenomenon in deep
+learning remains an open question, but inductive biases (introduced 
+in <a href="/blog/2021/double-descent-2/">the previous post</a>) seem to play a
+key role.</p>
+
+<p>In the over-parameterized regime, empirical risk minimizers are able to
+interpolate the data. Intuitively :</p>
+
+<ul>
+  <li>Near the interpolation point, there are very few solutions that fit the training data perfectly. Hence, any noise in the data or model mis-specification will destroy the global structure of the model, leading to an irregular solution that generalizes badly (figure with \(d=20\)).</li>
+  <li>As effective model capacity grows, many more interpolating solutions exist, including some that generalize better and can be selected thanks to the right inductive bias, e.g. smaller norm (figure with \(d=1000\)), or ensemble methods.</li>
+</ul>
+
+<div class="l-page row">
+<div class="col-md-4">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/d1.png" />
+<div class="caption">
+      <p>\(d=1\)</p>
+    </div>
+</div>
+<div class="col-md-4">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/d20.png" />
+<div class="caption">
+      <p>\(d=20\)</p>
+    </div>
+</div>
+<div class="col-md-4">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/d1000.png" />
+<div class="caption">
+      <p>\(d=1000\)</p>
+    </div>
+</div>
+</div>
+<div class="caption">
+  <p>Fitting degree \(d\) Legendre polynomials (orange curve) to \(n=20\) noisy samples (red dots), from a polynomial of degree 3 (blue curve).
+Gradient descent is used to minimize the squared error, which leads to the smallest norm solution (considering the norm of the vector of coefficients). Taken from <a href="https://windowsontheory.org/2019/12/05/deep-double-descent/" target="\_blank">this blog post</a>.</p>
+</div>
+
+<h2 id="linear-regression-with-gaussian-noise">Linear Regression with Gaussian Noise</h2>
+
+<p>In this section we consider the family class
+\((\mathcal{H}_p)_{p\in\left[ 1,d\right]}\) of linear functions
+\(h:\R^d\mapsto \R\) where exactly \(p\) components are non-zero
+(\(1\leq p\leq d\)). We will study the generalization error obtained with
+ERM when increasing \(p\) (which is regarded as the class complexity).</p>
+
+<div class="l-body">
+<div class="col-auto">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/double_descent_gaussian_model.png" />
+</div>
+</div>
+<div class="caption">
+  <p>Plot of risk \(\E[(y-x^T\hat{w})^2]\) as a function of \(p\), under the random selection model of the subset of \(p\) features. Here \(\norm{w}^2=1\),  \(\sigma^2=1/25\), \(d=100\) and \(n=40\). Taken from Belkin et al., 2020 <d-cite key="belkin2020two"></d-cite>.</p>
+</div>
+
+<p>The class of predictors \(\mathcal{H}_p\) is defined as follow:</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 17</strong>.
+For \(p \in \left[ 1,d\right]\), \(\mathcal{H}_p\) is the set of
+functions \(h:\R^d\mapsto \R\) of the form:</p>
+
+\[h(u)=u^Tw,\quad \text{for }u \in \R^d\]
+
+  <p>With \(w \in \R^d\) having
+exactly \(p\) non-zero elements.</p>
+</div>
+
+<p>Let \((X, \mathbf{\epsilon})\in \R^d\times\R\) be independent random
+variables with \(X \sim \N(0,I)\) and
+\(\mathbf{\epsilon} \sim \N(0,\sigma^2)\). Let \(h^* \in \mathcal{H}_d\) and
+define the random variable</p>
+
+\[Y=h^*(X)+\sigma \mathbf{\epsilon}=X^Tw+\sigma \mathbf{\epsilon}\]
+
+<p>with
+\(\sigma&gt;0\) with \(w \in \R^d\) defined by \(h^*\). We consider
+\((X_i, Y_i)_{i=1}^n\) \(n\) iid copies of \((X,Y)\). We are interested in the
+following problem:
+<a name="eq:linear_gaussian"></a></p>
+
+\[\min_{h\in \mathcal{H}_d}\E[(h(X) - Y)^2]
+   \tag{5}\]
+
+<p>Let \(\mathbf{X}\in \R^{n\times d}\) the random matrix which rows are the
+\(X_i^T\) and \(\mathbf{Y} =(Y_1,.., Y_n)^T \in \R^n\). In the following we
+will assume that \(\mathbf{X}\) is full row rank and that \(n \ll d\). Applying
+empirical risk minimization we can write:
+<a name="eq:linear_gaussian_erm"></a></p>
+
+\[\min_{w\in \R^d} \frac{1}{2}\norm{\mathbf{X} w - \mathbf{Y}}^2
+\tag{6}\]
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 18</strong> (Random p-submatrix/p-subvector) <d-footnote>The notation used for the random p-submatrix and random p-subvector is not common and is introduced for clarity.</d-footnote>.
+For any \((p,q) \in \left[  1, d\right]^2\) such that \(p+q=d\) and
+matrix \(\mathbf{A} \in \R^{n\times d}\) and column vector \(v\in \R^d\), we
+will denote by \(\mathbf{\Ap}\) (resp. \(\vp\)) the sub-matrix (resp.
+sub-vector) obtained by randomly selecting a subset of p columns (resp.
+elements), and by \(\mathbf{\Aq} \in \R^{n\times q}\) and \(\vq\in \R^{q}\)
+their discarded counterpart.</p>
+</div>
+
+<p>In order to solve <a href="#eq:linear_gaussian_erm">(6)</a> we will search for a solution in
+\(\mathcal{H}_p \subset \mathcal{H}_d\) and increase \(p\) progressively
+which is a form of structural empirical risk minimization as
+\(\mathcal{H}_p \subset \mathcal{H}_{p+1}\) for any \(p&lt;d\).</p>
+
+<p>Let \(p \in \left[  1, d\right]\), we are then interested in the
+following sub-problem:</p>
+
+\[\min_{w\in \R^p} \frac{1}{2}\norm{\mathbf{\Xp} w - y}^2\]
+
+<p>We have seen in proposition 12 of
+<a href="/blog/2021/double-descent-2/">the previous post</a>
+that the least norm solution is \(\p{\hat w}=\mathbf{\Xp}^+y\). If we define \(\q{\hat w} := 0\) then we will
+consider as a solution of the global problem <a href="#eq:linear_gaussian">(5)</a>
+\(\hat w:=\phi_p(\p{\hat w},\q{\hat w})\)
+where \(\phi_p: \R^p\times\R^{q}\mapsto \R^d\) is a map rearranging the
+terms of \(\p{\hat w}\) and \(\q{\hat w}\) to match the initial indices of
+\(w\).</p>
+
+<p><a name="thm:double_descent_lr"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 19</strong>.
+Let \((x, \epsilon)\in \R^d\times\R\)
+independent random variables with \(x \sim \N(0,I)\) and
+\(\epsilon \sim \N(0,\sigma^2)\), and \(w \in \R^d\). we assume that the
+response variable \(y\) is defined as \(y=x^Tw +\sigma \epsilon\). Let
+\((p,q) \in \left[  1, d\right]^2\) such that \(p+q=d\), \(\mathbf{\Xp}\)
+the randomly selected \(p\) columns sub-matrix of X. Defining
+\(\hat w:=\phi_p(\p{\hat w},\q{\hat w})\) with \(\p{\hat w}=\mathbf{\Xp}^+y\)
+and \(\q{\hat w} = 0\).</p>
+
+  <p>The risk of the predictor associated to \(\hat w\) is:</p>
+
+  <p>\(\E[(y-x^T\hat w)^2] =
+\begin{cases}
+(\norm{\wq}^2+\sigma^2)(1+\frac{p}{n-p-1}) &amp;\quad\text{if } p\leq  n-2\\
++\infty &amp;\quad\text{if }n-1 \leq p\leq  n+1\\
+\norm{\wp}^2(1-\frac{n}{p}) +  (\norm{\wq}^2+\sigma^2)(1+\frac{n}{p-n-1}) &amp;\quad\text{if }p\geq n+2\end{cases}\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> Because \(x\) is zero mean and identity covariance matrix, and
+because \(x\) and \(\epsilon\) are independent:</p>
+
+\[\begin{aligned}
+\E\left[(y-x^T\hat w)^2\right]
+&amp;= \E\left[(x^T(w-\hat w) + \sigma \epsilon)^2\right] \\
+&amp;= \sigma^2 + \E\left[\norm{w-\hat w}^2\right] \\    
+&amp;= \sigma^2 + \E\left[\norm{\wp-\p{\hat w}}^2\right]+\E\left[\norm{\wq-\q{\hat w}}^2\right]
+\end{aligned}\]
+
+  <p>and because \(\q{\hat w}=0\), we have:</p>
+
+\[\E\left[(y-x^T\hat w)^2\right] =  \sigma^2 + \E\left[\norm{\wp-\p{\hat w}}^2\right]+\norm{\wq}^2\]
+
+  <p>The classical regime (\(p\leq n\)) as been treated in Breiman &amp; Freedman, 1983 <d-cite key="breiman1983many"></d-cite>.
+We will then consider the interpolating regime (\(p \geq n\)). Recall that
+X is assumed to be of rank \(n\). Let \(\eta = y - \mathbf{\Xp} \wp\). We can
+write :</p>
+
+\[\begin{aligned}
+    \wp-\p{\hat w} 
+      &amp;= \wp - \mathbf{\Xp}^+y \\
+      &amp;= \wp - \mathbf{\Xp}^+(\eta + \mathbf{\Xp} \wp) \\
+      &amp;= (\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp - \mathbf{\Xp}^+ \eta
+\end{aligned}\]
+
+  <p>It is easy to show (left as an exercise) that
+\((\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\) is the matrix of the orthogonal
+projection on \(\text{Ker}(\mathbf{\Xp})\). Furthermore,
+\(-\mathbf{\Xp}^+ \eta \in \text{Im}(\mathbf{\Xp}^+)=\text{Im}(\mathbf{\Xp}^T)\). Then
+\((\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp\) and \(-\mathbf{\Xp}^+ \eta\) are orthogonal
+and the Pythagorean theorem gives:</p>
+
+\[\norm{\wp-\p{\hat w}}^2 = \norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2 + \norm{\mathbf{\Xp}^+ \eta}^2\]
+
+  <p>We will treat each term of the right hand side of this equality
+separately.</p>
+
+  <ul>
+    <li>
+      <p>\(\norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2\):</p>
+
+      <p>\(\mathbf{\Xp}^+\mathbf{\Xp}\) is the matrix of the orthogonal projection on
+\(\text{Im}(\mathbf{\Xp}^T)=\text{Im}(\mathbf{\Xp}^+)\), then using again the
+Pythagorean theorem gives:</p>
+
+\[\norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2 = \norm{\wp}^2 - \norm{\mathbf{\Xp}^+\mathbf{\Xp}\wp}^2\]
+
+      <p>Because \(\mathbf{\Xp}^+\mathbf{\Xp}\) is the matrix of the orthogonal
+projection on \(\text{Im}(\mathbf{\Xp}^T)\) we can write
+\(\mathbf{\Xp}^+\mathbf{\Xp}\wp\) as a linear combination of rows of \(X_p\),
+then using the fact that the \(x_i\) are i.i.d and of standard normal
+distribution we have:</p>
+
+\[\E[\norm{\mathbf{\Xp}^+\mathbf{\Xp}\wp}^2]
+= \norm{\wp}^2\frac{n}{p}\quad\]
+
+      <p>then</p>
+
+\[\E[\norm{(\mathbf{I}- \mathbf{\Xp}^+\mathbf{\Xp})\wp}^2]
+= \norm{\wp}^2(1-\frac{n}{p})\]
+    </li>
+    <li>
+      <p>\(\norm{\mathbf{\Xp}^+ \eta}^2\):</p>
+
+      <p>The calculation of this term used
+the "trace trick" and the notion of distribution of
+inverse-Wishart for pseudo-inverse matrices and is beyond the scope
+of this blog post. It can be shown that:</p>
+
+\[\E[\norm{\mathbf{\Xp}^+ \eta}^2]= \begin{cases}
+(\norm{\wq}^2+\sigma^2)(\frac{n}{p-n-1}) &amp;\quad\text{if } p\geq  n+2\\
++\infty &amp;\quad\text{if }p \in \{n,n+1\}
+\end{cases}\]
+    </li>
+  </ul>
+
+  <p>◻</p>
+</blockquote>
+
+<div class="theorem l-body-outset">
+  <p><strong>Corollary 1</strong>.
+Let \(T\) be a uniformly random subset of \(\left[  1, d\right]\) of
+cardinality p. Under the setting of <a href="#thm:double_descent_lr">Theorem 19</a> and taking the expectation with
+respect to \(T\), the risk of the predictor associated to \(\hat w\) is:</p>
+
+  <p>\(\E[(Y-X^T\hat w)^2] =
+\begin{cases}
+ \left((1-\frac{p}{d})\norm{w}^2+\sigma^2\right)(1+\frac{p}{n-p-1}) &amp;\quad\text{if } p\leq  n-2\\
+\norm{w}^2\left(1-\frac{n}{d}(2- \frac{d-n-1}{p-n-1})\right) +\sigma^2(1+\frac{n}{p-n-1}) &amp;\quad\text{if } p\geq n+2
+\end{cases}\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> Since T is a uniformly random subset of
+\(\left[  1, d\right]\) of cardinality p:</p>
+
+\[\E[\norm{\wp}^2] = \E[\sum_{i\in T}w_i^2]= \E[\sum_{i=1}^{d}w_i^2 \1_{T}(i) ]=\sum_{i=1}^{d}w_i^2 \E[\1_{T}(i) ]=\sum_{i=1}^{d}w_i^2 &gt; \mathbb{P}[i \in T]=\norm{w}^2 \frac{p}{d}\]
+
+  <p>and, similarly:</p>
+
+\[\E[\norm{\wq}^2] =\norm{w}^2 \left(1-\frac{p}{d}\right)\]
+
+  <p>Plugging into <a href="#thm:double_descent_lr">Theorem 19</a> ends the proof. ◻</p>
+</blockquote>
+
+<h2 id="random-fourier-features">Random Fourier Features</h2>
+
+<p>In this section we consider the RFF model family (Rahimi &amp; Recht, 2007 <d-cite key="rahimi2007random"></d-cite>) as our
+class of predictors \(\mathcal{H}_N\).</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 20</strong>.
+We call <em>Random Fourier Features (RFF)</em> model any function
+\(h: \mathbb{R}^d \rightarrow \mathbb{R}\) of the form :</p>
+
+\[h(x) = \sum_{i=1}^{N} \beta_i z_i(x)\]
+
+  <p>With \(\beta \in \mathbb{R}^N\) the parameters of the model, and</p>
+
+\[z(x) = \sqrt{\frac{2}{N}} \begin{bmatrix}\cos(\omega_1^T x + b_1) \\ \vdots \\ \cos(\omega_N^T x + b_N)\end{bmatrix}\]
+
+\[\forall i \in \left[  1,N \right] \begin{cases}\omega_i \sim \mathcal{N}(0, \sigma^2 I_d) \\ b_i \sim \mathcal{U}([0, 2\pi])\end{cases}\]
+
+  <p>The vectors \(\omega_i\) and the scalars \(b_i\) are sampled before fitting
+the model, and \(z\) is called a <em>randomized map</em>.</p>
+</div>
+
+<p>The RFF family is a popular class of models that are linear w.r.t. the
+parameters \(\beta\) but non-linear w.r.t. the input \(x\), and can be seen
+as two-layer neural networks with fixed weights in the first layer. In a
+classification setting, using these models with the hinge loss amounts
+to fitting a linear SVM to \(n\) feature vectors (of dimension \(N\)). RFF
+models are typically used to approximate the Gaussian kernel and reduce
+the computational cost when \(N \ll n\) (e.g. kernel ridge regression when
+using the squared loss and a \(l_2\) regularization term). In our case
+however, we will go beyond \(N=n\) to observe the double descent
+phenomenon.</p>
+
+<blockquote>
+  <p><strong>Remark 7.</strong>
+<em>Clearly, we have \(\mathcal{H}_N \subset \mathcal{H}_{N+1}\) for any
+\(N \geq 0\)</em>.</p>
+</blockquote>
+
+<p>Let \(k:(x,y) \rightarrow e^{-\frac{1}{2\sigma^2}||x-y||^2}\) be the
+Gaussian kernel on \(\mathbb{R}^d\), and let \(\mathcal{H}_{\infty}\) be a
+class of predictors where empirical risk minimizers on
+\(\mathcal{D}_n = \{(x_1, y_1), \dots, (x_n, y_n)\}\) can be expressed as
+\(h: x \rightarrow \sum_{k=1}^n \alpha_k k(x_k, x)\). Then, as
+\(N \rightarrow \infty\), \(\mathcal{H}_N\) becomes a closer and closer
+approximation of \(\mathcal{H}_{\infty}\).</p>
+
+<p>For any \(x, y \in \mathbb{R}^d\), with the vectors
+\(\omega_k \in \mathbb{R}^d\) sampled from \(\mathcal{N}(0, \sigma^2 I_d)\):</p>
+
+\[\begin{aligned}
+k(x,y)  &amp;= e^{-\frac{1}{2\sigma^2}(x-y)^T(x-y)} \\
+        &amp;\overset{(1)}{=} \mathbb{E}_{\omega \sim \mathcal{N}(0, \sigma^2 I_d)}[e^{i \omega^T(x-y)}] \\
+        &amp;= \mathbb{E}_{\omega \sim \mathcal{N}(0, \sigma^2 I_d)}[\cos(\omega^T(x-y))] 
+            &amp; \text{since } k(x,y) \in \mathbb{R} \\
+        &amp;\approx \frac{1}{N} \sum_{k=1}^N \cos(\omega_k^T(x-y)) \\
+        &amp;= \frac{1}{N} \sum_{k=1}^N 2 \cos(\omega_k^T x + b_k) \cos(\omega_k^T y + b_k) \\
+        &amp;\overset{(2)}{=} z(x)^T z(y)
+\end{aligned}\]
+
+<p>Where \((1)\) and \((2)\) are left as an exercise, with
+indications <a href="http://gregorygundersen.com/blog/2019/12/23/random-fourier-features/">here</a> if needed.</p>
+
+<p>Hence, for $h \in \mathcal{H}_{\infty}$ :</p>
+
+\[h(x) = \sum_{k=1}^n \alpha_k k(x_n, x)
+\approx \underbrace{\left(\sum_{k=1}^N \alpha_k z(x_k) \right)^T}_{\beta} z(x)\]
+
+<p>A complete definition is outside the scope of this lecture, but
+\(\mathcal{H}_{\infty}\) is actually the <em>Reproducing Kernel Hilbert Space
+(RKHS)</em> corresponding to the Gaussian kernel, for which RFF models are a
+good approximation when sampling the random vectors \(\omega_i\) from a
+normal distribution.</p>
+
+<p>We use ERM to find the predictor \(h_{n,_N} \in \mathcal{H}_N\) and, in
+the interpolation regime where multiple minimizers exist, we choose the
+one whose parameters \(\beta \in \mathbb{R}^N\) have the smallest \(l_2\)
+norm. This training procedure allows us to observe a model-wise double
+descent (figure below).</p>
+
+<div class="l-body">
+<div class="col-auto">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/double_descent_rff_model.png" />
+</div>
+</div>
+<div class="caption">
+  <p>Model-wise double descent risk curve for RFF model on a subset of MNIST ($n=10^4$, 10 classes), \emph{choosing the smallest norm predictor $h_{n,N}$} when $N &gt; n$. The interpolation threshold is achieved at $N=10^4$. Taken from Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite>, which uses an equivalent but slightly different definition of RFF models.</p>
+</div>
+
+<p>Indeed, in the under-parameterized regime,
+statistical analyses suggest choosing \(N \propto \sqrt{n} \log(n)\) for
+good test risk guarantees <d-cite key="rahimi2007random"></d-cite>. And as we approach the
+interpolation point (around \(N = n\)), we observe that the test risk
+increases then decreases again.</p>
+
+<p>In the over-parameterized regime (\(N \geq n\)), multiple predictors are
+able to fit perfectly the training data. As
+\(\mathcal{H}_N \in \mathcal{H}_{N+1}\), increasing \(N\) leads to richer
+model classes and allows constructing interpolating predictors that are
+more regular, with smaller norm (eventually converging to \(h_{n,\infty}\)
+obtained from \(\mathcal{H}_{\infty}\)). As detailed in <a href="#thm:rff_bound">theorem 22</a> (in a noiseless setting), the small norm
+inductive bias is indeed powerful to ensure small generalization error.</p>
+
+<p><a name="thm:rff_bound"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 22</strong> (Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite>).
+Fix any \(h^* \in \mathcal{H}_{\infty}\). Let \((X_1, Y_1), \dots ,(X_n, Y_n)\) be
+i.i.d. random variables, where \(X_i\) is drawn uniformly at random from a
+compact cube \(\Omega \in \mathbb{R}^d\), and \(Y_i = h^*(X_i)\) for all
+\(i\). There exists constants \(A,B &gt; 0\) such that, for any interpolating
+\(h \in \mathcal{H}_{\infty}\) (i.e., \(h(X_i) = Y_i\) for all \(i\)), so that
+with high probability :</p>
+
+  <p>\(\sup_{x \in \Omega}|h(x) - h^*(x)| &lt; A e^{-B(n/\log n)^{1/d}}
+(||h^*||_{\mathcal{H}_{\infty}} + ||h||_{\mathcal{H}_{\infty}})\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> We refer the reader directly to Belkin et al., 2019 <d-cite key="Belkin2019"></d-cite> for
+the proof. ◻</p>
+
+</blockquote>
+
+<p>The <a href="/blog/2021/double-descent-4/">next post</a> concludes with
+some references to recent related works studying optimization in the
+over-parameterized regime, or linking the double descent to a physical
+phenomenon named <em>jamming</em>.</p>]]></content><author><name>Marc Lafon</name></author><summary type="html"><![CDATA[The role of inductive biases with two linear examples (linear regression with gaussian noise & Random Fourier Features).]]></summary></entry><entry><title type="html">Deep double descent explained (2/4) - Inductive bias of SGD</title><link href="https://marclafon.github.io//blog/2021/double-descent-2/" rel="alternate" type="text/html" title="Deep double descent explained (2/4) - Inductive bias of SGD" /><published>2021-06-08T00:00:00+00:00</published><updated>2021-06-08T00:00:00+00:00</updated><id>https://marclafon.github.io//blog/2021/double-descent-2</id><content type="html" xml:base="https://marclafon.github.io//blog/2021/double-descent-2/"><![CDATA[\[\require{physics}
+    \newcommand{\LL}{\mathcal{L}}
+    \newcommand{\R}{\mathbb{R}}
+    \newcommand{\D}{\mathcal{D}}
+    \newcommand{\Dn}{\mathcal{D}_n}
+    \DeclareMathOperator*{\argmin}{argmin}\]
+
+<h2 id="inductive-biases">Inductive biases</h2>
+
+<p>In the supervised learning problem, the model needs to generalize
+patterns observed in the training data to unseen situations. In that
+sense, the learning procedure has to use mechanisms similar to inductive
+reasoning. As there are generally many possible generalizable solutions,
+Mitchell (1980)<d-cite key="mitchell1980need"></d-cite> advocated the need for inductive biases in learning
+generalization. Inductive biases are assumptions made in order to
+prioritized one solution over another both exhibiting the same
+performance on the training data. For example, a common inductive bias
+is the Occam’s razor principle stating that in case of equally good
+solutions the “simplest” one should be preferred. Another form of
+inductive bias is to incorporate some form of prior knowledge about the
+structure of the data, its generation process or to constrain the model
+to respect specific properties.</p>
+
+<p>In the under-parameterized regime, regularization can be used for
+capacity control and is a form of inductive bias. One common choice is
+to search for small norm solutions, e.g. adding a penalty term, the
+\(L_2\) norm of the weights vector. This is known as Tikhonov
+regularization in the linear regression setting (also known as Ridge
+regression in this case).</p>
+
+<p>In the over-parameterized regime, as the complexity of \(\mathcal{H}\) and
+the EMC increases, the number of interpolating solutions (i.e. achieving
+almost zero training error) increases, and the question of the selection
+of a particular element in \(\text{argmin}_{h \in \mathcal{H}} L_n(h)\) is
+crucial. Inductive biases, explicit or implicit, are a way to find
+predictors that generalize well.</p>
+
+<h3 id="explicit-inductive-biases">Explicit inductive biases</h3>
+
+<p>As illustrated in Belkin et al. (2019) <d-cite key="Belkin2019"></d-cite>, several common
+inductive biases can be used to observe a model-wise double descent (e.g. as the number of
+parameters \(N\) increases).</p>
+
+<h4 id="least-norm">Least Norm</h4>
+
+<p>For the model class of Random Fourier Features (defined in
+<a href="/blog/2021/double-descent-3/">this post</a>, by choosing explicitly the minimum norm
+linear regression in the feature space. This bias towards the choice of
+parameters of minimum norm is common to a lot of machine learning model.
+For example, the ridge regression induces a constraint on the \(L_2\) norm
+of the solution, and the lasso regression on the \(L_1\) norm. We can also
+see the support vector machine (SVM) as a way of inducing a least norm
+bias because maximizing the margin is equivalent to minimizing the norm
+of the parameter under the constraint that all points are well
+classified.</p>
+
+<h4 id="model-architecture">Model architecture</h4>
+
+<p>Another way of inducing a bias is by choosing a particular class of
+functions that we think is well suited for our problem.
+Battaglia et al. (2018) <d-cite key="battaglia2018relational"></d-cite>
+discuss different type of inductive bias
+considered by different type of neural network architectures. Working
+with images it is better to use a convolutional neural network (CNN) as
+it can induce translational equivariance, whereas the recurrent neural
+network (RNN) is better suited to capture long-term dependencies in a
+sequence data. Using a naive Bayes classifier is of great utility if we
+know that the features are independent, etc.</p>
+
+<h4 id="ensembling">Ensembling</h4>
+
+<p>Random forest models use yet another type of inductive bias. By
+averaging potentially non-smooth interpolating trees, the interpolating
+solution has a higher degree of smoothness and generalizes better than
+any individual interpolating tree.</p>
+
+<h3 id="implicit-bias-of-gradient-descent">Implicit Bias of gradient descent</h3>
+
+<p>Gradient descent is a widely used optimization procedure in machine
+learning, and has been observed to converge on solutions that generalize
+surprisingly well, thanks to an implicit inductive bias.</p>
+
+<p>We recall that the gradient descent update rule for parameter \(w\) using
+a loss function \(\LL\) is the following (where \(\eta &gt;0\) is the step
+size):</p>
+
+\[\begin{aligned}
+    w_{k+1} = w_k - \eta \nabla \LL(w)
+\end{aligned}\]
+
+<h3 id="gradient-descent-in-under-determined-least-squares-problem">Gradient descent in under-determined least squares problem</h3>
+
+<p>Consider a non-random dataset \(\{(x_i, y_i)\}_{i=1}^n\), with
+\((x_i, y_i) \in \R^d\times\R\), for \(i \in \{1, \dots ,n\}\) and let
+\(\mathbf{X}\in \R^{n\times d}\) be the matrix which rows are the \(x_i^T\) and
+\(y \in \R^{n}\) the column vector which elements are the \(y_i\). We
+consider the linear least squares:
+<a name="eqn:leastsquare"></a></p>
+
+\[\label{eqn:leastsquare}
+    \min_{w\in \R^d} \LL(w) = \min_{w\in \R^d} \frac{1}{2}\norm{\mathbf{X} w - y}^2
+\tag{1}\]
+
+<p>We will study the property of the solution found using gradient descent.</p>
+
+<p><a name="def:pseudo_inv"></a></p>
+<div class="definition l-body-outset">
+  <p><strong>Definition 9</strong> (Moore-Penrose pseudo-inverse).
+Let \(\mathbf{A} \in \R^{ n\times d}\) be a matrix, the Moore-Penrose
+pseudo-inverse is the only matrix \(\mathbf{A}^{+}\) satisfying the following
+properties:</p>
+
+  <ol>
+    <li>\(\mathbf{A} \mathbf{A}^+ \mathbf{A} = \mathbf{A}\) ,</li>
+    <li>\(\mathbf{A}^+ \mathbf{A} \mathbf{A}^+ = \mathbf{A}^+\) ,</li>
+    <li>\((\mathbf{A}^+\mathbf{A})^T = \mathbf{A}^+\mathbf{A}\) ,</li>
+    <li>\((\mathbf{A}\mathbf{A}^+)^T = \mathbf{A}\mathbf{A}^+\).</li>
+  </ol>
+
+  <p>Furthermore, if \(\rank(\mathbf{A})=\min(n,d)\), then \(\mathbf{A}^+\) has a simple
+algebraic expression:</p>
+
+  <ul>
+    <li>If \(n&lt;d\), then \(\rank(\mathbf{A})=n\) and
+  \(\mathbf{A}^+=\mathbf{A}^T(\mathbf{A}\mathbf{A}^T)^{-1}\)</li>
+    <li>If \(d&lt;n\), then \(\rank(\mathbf{A})=d\) and
+  \(\mathbf{A}^+=(\mathbf{A}^T\mathbf{A})^{-1}\mathbf{A}^T\)</li>
+    <li>If \(d=n\), then \(\mathbf{A}\) is invertible and \(\mathbf{A}^+=\mathbf{A}^{-1}\)</li>
+  </ul>
+</div>
+
+<p><a name="lemma:psdinv_prop"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Lemma 10</strong>.
+For a matrix \(\mathbf{A} \in \R^{ n\times d}\),
+\(Im(I\text{-}\mathbf{A}^+\mathbf{A})=Ker(\mathbf{A})\), \(Ker(\mathbf{A}^+)=Ker(\mathbf{A}^T)\)
+and \(Im(\mathbf{A}^+)=Im(\mathbf{A^T})\).</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> Left to the reader. The proof follows directly from the definition of the pseudo-inverse. ◻</p>
+</blockquote>
+
+<p><a name="thm:ls_solutions"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 11</strong>.
+The set of solutions \(\mathcal{S}_{LS}\) of the least square problem (i.e.
+minimizing <a href="#eqn:leastsquare">(1)</a>) is exactly:</p>
+
+\[\mathcal{S}_{LS} = \{\mathbf{X}^+y + (\mathbf{I}\text{-}\mathbf{X}^+\mathbf{X})u, u\in \R^d\}\]
+
+</div>
+
+<blockquote>
+  <p><em>Proof sketch</em>.</p>
+
+  <p>Writing</p>
+
+\[\mathbf{X} w - y = \mathbf{X} w - \mathbf{X}\mathbf{X}^+y - (\mathbf{I}-\mathbf{X}\mathbf{X}^+)y\]
+
+  <p>proves using pseudo-inverse properties that \(\mathbf{X} w - \mathbf{X}\mathbf{X}^+y\)
+and \((\mathbf{I}-\mathbf{X}\mathbf{X}^+)y\) are orthogonal. Then using the
+Pythagorean theorem:</p>
+
+\[\norm{\mathbf{X} w - y}^2 \geq  \norm{(\mathbf{I}-\mathbf{X}\mathbf{X}^+)y}^2\]
+
+  <p>The inequality being an equality if and only if \(\mathbf{X}w=\mathbf{X}\mathbf{X}^+y\).
+Then \(\mathbf{X}^+y\) is one solution of
+<a href="#eqn:leastsquare">(1)</a> and by <a href="#lemma:psdinv_prop">Lemma 10</a> we can conclude that
+\(\{\mathbf{X}^+y + (\mathbf{I}-\mathbf{X}^+\mathbf{X})u, u\in\R^d\}\) is the set of
+solutions. ○</p>
+</blockquote>
+
+<blockquote>
+  <p><em>Remark 4</em>.
+Depending on the \(\rank\) of \(\mathbf{X}\), the set of solutions
+\(\mathcal{S}_{LS}\) will differ depending on the expression of
+\(\mathbf{X}^+\):</p>
+
+  <ul>
+    <li>If \(n&lt;d\) and \(\rank(\mathbf{X})=n\), then
+  \(\mathbf{X}^+=\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}\):
+  \(\mathcal{S}_{LS} = \{\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y +
+  (\mathbf{I}-\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}\mathbf{X})u, u\in\R^d\}\)</li>
+    <li>If \(d&lt;n\) and \(\rank(\mathbf{X})=d\), then
+  \(\mathbf{X}^+=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\):
+  \(\mathcal{S}_{LS} = \{\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y\}\)</li>
+    <li>If \(d=n\) and \(\mathbf{X}\) is invertible, then \(\mathbf{X}^+=\mathbf{X}^{-1}\):
+  \(\mathcal{S}_{LS} = \{\mathbf{X}^{-1}y\}\)</li>
+  </ul>
+</blockquote>
+
+<p><a name="prop:smalestnorm"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Proposition 12</strong>.
+Assuming that \(\mathbf{X}\) has \(\rank n\) and \(n&lt;d\), the least square problem
+<a href="#eqn:leastsquare">(1)</a> has infinitely many solutions and
+\(\mathbf{X}^+y = \mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y\) is the minimum euclidean
+norm solution.</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> From the previous remark, we know that</p>
+
+\[\ \mathcal{S}_{LS} = \{\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y +
+(\mathbf{I}-\mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}\mathbf{X})u, u\in\R^d\}\]
+
+  <p>For arbitrary \(u\in \R^d\),</p>
+
+\[\begin{aligned}
+(\mathbf{X}^+y)^T(\mathbf{I}-\mathbf{X}^+\mathbf{X})u 
+    &amp;\overset{\mathrm{(ii)}}{=} (\mathbf{X}^+\mathbf{X}\mathbf{X}^+y)^T(\mathbf{I}-\mathbf{X}^+\mathbf{X})u \\
+    &amp;= (\mathbf{X}^+y)^T(\mathbf{X}^+\mathbf{X})^T(\mathbf{I}-\mathbf{X}^+\mathbf{X})u\\
+    &amp;\overset{\mathrm{(iii)}}{=} (\mathbf{X}^+y)^T\mathbf{X}^+\mathbf{X}(\mathbf{I}-\mathbf{X}^+\mathbf{X})u\\
+    &amp;= (\mathbf{X}^+y)^T\mathbf{X}^+(\mathbf{X}-\mathbf{X}\mathbf{X}^+\mathbf{X})u \overset{\mathrm{(i)}}{=} 0
+\end{aligned}\]
+
+  <p>using \((i)\), \((ii)\) and \((iii)\) from the definition of the pseudo inverse.
+Thus, \((\mathbf{X}^+y)\) and
+\((\mathbf{I}-\mathbf{X}^+\mathbf{X})u\) are orthogonal \(\forall u \in \R^d\), and
+applying the Pythagorean theorem gives:</p>
+
+  <p>\(\begin{aligned}
+\norm{(\mathbf{X}^+y)+(\mathbf{I}-\mathbf{X}^+\mathbf{X})u}^2
+&amp;= \norm{(\mathbf{X}^+y)}^2+\norm{(\mathbf{I}-\mathbf{X}^+\mathbf{X})u}^2 \\
+&amp;\geq \norm{(\mathbf{X}^+y)}^2
+\end{aligned}\)
+◻</p>
+</blockquote>
+
+<p><a name="thm:gd_ls"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 13</strong>.
+If the linear least square problem <a href="#eqn:leastsquare">(1)</a> is under-determined, i.e. \((n&lt;d)\) and
+\(\rank(\mathbf{X})=n\), using gradient descent with a fixed learning rate
+\(0&lt;\eta&lt;\frac{1}{\sigma_{max}(\mathbf{X})}\), where \(\sigma_{max}(\mathbf{X})\) is
+the largest eigenvalue of \(\mathbf{X}\), from an initial point
+\(w_0\in Im(\mathbf{X}^T)\) will converge to the minimum norm solution of
+<a href="#eqn:leastsquare">(1)</a>.</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> As \(\mathbf{X}\) is assumed to be of row rank \(n\), we can write its
+singular value decomposition as :</p>
+
+\[\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T = \mathbf{U} 
+\begin{bmatrix}\mathbf{\Sigma}_1 &amp; 0 \end{bmatrix} \begin{bmatrix}\mathbf{V}_1^T \\ \mathbf{V}_2^T \end{bmatrix}\]
+
+  <p>where \(\mathbf{U}\in \R^{n\times n}\) and \(\mathbf{V}\in \R^{d\times d}\) are
+orthogonal matrices, \(\mathbf{\Sigma} \in \R^{n\times d}\) is a rectangular
+diagonal matrix and \(\mathbf{\Sigma}_1 \in \R^{n\times n}\) is a diagonal
+matrix. The minimum norm solution \(w^*\) can be rewritten as :</p>
+
+\[w^* = \mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y = \mathbf{V}_1 \mathbf{\Sigma}_1^{-1}\mathbf{U}^Ty\]
+
+  <p>The gradient descent update rule is the following (where \(\eta &gt;0\) is
+the step size):</p>
+
+\[\begin{aligned}
+    w_{k+1} = w_k - \eta \nabla \LL(w) \\
+            = w_k - \eta \mathbf{X}^T(\mathbf{X} w_k - y) \\
+            = (\mathbf{I}-\eta \mathbf{X}^T\mathbf{X})w_k + \eta \mathbf{X}^Ty
+\end{aligned}\]
+
+  <p>Then, by induction, we have :</p>
+
+\[w_{k} = (\mathbf{I}-\eta \mathbf{X}^T\mathbf{X})^k w_0 + \eta \sum_{l=0}^{k-1} (\mathbf{I}-\eta \mathbf{X}^T\mathbf{X})^l \mathbf{X}^Ty\\\]
+
+  <p>Using the singular value decomposition of \(\mathbf{X}\), we can see that
+\(\mathbf{X}^T\mathbf{X} = \mathbf{V} \mathbf{\Sigma}^T \mathbf{\Sigma} \mathbf{V}^T\).
+Furthermore, as \(\mathbf{V}\) is orthogonal, \(\mathbf{V}^T\mathbf{V}=\mathbf{I}\).<br />
+Then, the gradient descent iterate at step \(k\) can be written:</p>
+
+\[\begin{aligned}
+    w_k 
+    &amp;= \mathbf{V}(\mathbf{I}-\eta\mathbf{\Sigma}^T\mathbf{\Sigma})^k \mathbf{V}^T w_0 
+        + \eta \mathbf{V} \Big(\sum_{l=0}^{k-1} (\mathbf{I} - 
+                \eta \mathbf{\Sigma}^T \mathbf{\Sigma})^l \mathbf{\Sigma}^T \Big) \mathbf{U}^Ty \\
+    &amp;= \mathbf{V}
+    \begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^k &amp; 0 \\ 
+    0 &amp; \mathbf{I} 
+    \end{bmatrix}
+    \mathbf{V}^T w_0 + \eta \mathbf{V} \Big(\sum_{l=0}^{k-1} 
+    \begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^l \mathbf{\Sigma}_1 \\ 
+    0 
+    \end{bmatrix}
+    \Big) \mathbf{U}^Ty
+\end{aligned}\]
+
+  <p>By choosing
+\(0&lt;\eta&lt;\frac{1}{\sigma_{max}(\mathbf{\Sigma}_1)}\) with
+\(\sigma_{max}(\mathbf{\Sigma}_1)\) the largest eigenvalue of \(\mathbf{\Sigma}_1\),
+we guarantee that the eigenvalues of
+\(\mathbf{I}-\eta\mathbf{\Sigma}^T \mathbf{\Sigma}\) are all strictly less than 1.
+Then:</p>
+
+\[\mathbf{V}\begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^k &amp; 0 \\ 
+    0 &amp; \mathbf{I} 
+ \end{bmatrix} \mathbf{V}^T w_0 \xrightarrow[k\rightarrow \infty]{} \mathbf{V}\begin{bmatrix}
+    0 &amp; 0 \\ 
+    0 &amp; \mathbf{I} 
+ \end{bmatrix} \mathbf{V}^T w_0 = \mathbf{V}_2 \mathbf{V}_2^T w_0\]
+
+  <p>and</p>
+
+\[\eta \sum_{l=0}^{k-1} 
+    \begin{bmatrix}
+    (\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^l \mathbf{\Sigma}_1 \\ 
+    0 
+    \end{bmatrix} \xrightarrow[k\rightarrow \infty]{} 
+    \eta  
+    \begin{bmatrix}
+    \sum_{l=0}^{\infty}(\mathbf{I}-\eta\mathbf{\Sigma}_1^2)^l \mathbf{\Sigma}_1 \\ 
+    0 
+    \end{bmatrix} = \begin{bmatrix}
+    \eta (\mathbf{I}- \mathbf{I} + \eta \mathbf{\Sigma}_1^2)^{-1}\mathbf{\Sigma}_1\\ 
+    0 
+    \end{bmatrix} =  \begin{bmatrix}
+    \mathbf{\Sigma}_1^{-1}\\ 
+    0 
+    \end{bmatrix}\]
+
+  <p>Finally, noting \(w_\infty\) the limit of gradient descent iterates we
+have in the limit :</p>
+
+\[\begin{aligned}
+    w_{\infty} &amp;= \mathbf{V}_2 \mathbf{V}_2^T w_0 + \mathbf{V}_1 \mathbf{\Sigma}_1^{-1} \mathbf{U}^Ty \\
+              &amp;= \mathbf{V}_2 \mathbf{V}_2^T w_0 + \mathbf{X}^T(\mathbf{X}\mathbf{X}^T)^{-1}y \\
+              &amp;= \mathbf{V}_2 \mathbf{V}_2^T w_0 + w^*
+    \end{aligned}\]
+
+  <p>Because \(w_0\) in the range of \(\mathbf{X}^T\), then we can write
+\(w_0 = \mathbf{X}^T z\) for some \(z \in \R^n\).</p>
+
+\[\begin{aligned}
+    \mathbf{V}_2 \mathbf{V}_2^T w_0 = \mathbf{V}\begin{bmatrix}
+                         0 &amp; 0 \\ 
+                         0 &amp; \mathbf{I} 
+                      \end{bmatrix} \mathbf{V}^T \mathbf{X}^Tz \\
+                  &amp;= \mathbf{V}\begin{bmatrix}
+                         0 &amp; 0 \\ 
+                         0 &amp; \mathbf{I} 
+                      \end{bmatrix} \mathbf{V}^T \mathbf{V} \mathbf{\Sigma}^T \mathbf{U}^Tz \\
+                  &amp;= \mathbf{V}\begin{bmatrix}
+                         0 &amp; 0 \\ 
+                         0 &amp; \mathbf{I} 
+                      \end{bmatrix} \begin{bmatrix}\mathbf{\Sigma}_1\\ 0 \end{bmatrix} \mathbf{U}^T=0
+    \end{aligned}\]
+
+  <p>Therefore gradient descent will converge to the minimum norm solution. ◻</p>
+</blockquote>
+
+<h3 id="gradient-descent-on-separable-data">Gradient descent on separable data</h3>
+
+<p>In this section we are concerned with the effect of using gradient
+descent on a classification problem on a linearly separable dataset and
+using a smooth (we will explain in what sens), strictly decreasing and
+non-negative surrogate loss function. For the sake of clarity, we will
+prove the results using the exponential loss function
+\(\ell:x\mapsto e^{-x}\) but the results will be expressed for the more
+general case.</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 14</strong> (Linearly separable dataset).
+A dataset \(\Dn = \{(x_i, y_i)\}_{i=1}^{n}\) where
+\(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\) is
+linearly separable if \(\exists\ w_*\) such that
+\(\forall i: y_i w_*^T x_i &gt; 0\).</p>
+</div>
+
+<p>The results of this section hold assuming the considered loss functions
+respect the following properties :</p>
+
+<div class="theorem l-body-outset">
+  <p><strong>Assumption 1</strong>.
+The loss function \(\ell\) is positive, differentiable, monotonically
+decreasing to zero, (i.e. \(\ell(u)&gt;0\), \(\ell'(u)&lt;0\),
+\(\lim_{u \xrightarrow{}\infty}\ell(u)=\lim_{u \xrightarrow{}\infty}\ell'(u)=0\))
+and \(\lim_{u \xrightarrow{}-\infty}\ell'(u)\neq0\).</p>
+</div>
+
+<div class="theorem l-body-outset">
+  <p><strong>Assumption 2</strong>.
+The gradient of \(\ell\) is \(\beta\)-Lipschitz:</p>
+
+  <p>\(\ \ \forall u,v \in \R, \ \ \norm{\nabla \ell(u) - \nabla \ell(v)}\leq \beta \norm{u-v}.\)</p>
+</div>
+
+<div class="theorem l-body-outset">
+  <p><strong>Assumption 3</strong>.
+Generally speaking a function \(f:\R \mapsto \R\) is said to have a <em>tight
+exponential tail</em> if there exist positive constants c, a, \(\mu_1\),
+\(\mu_2\) and \(u_0\) such that:</p>
+
+\[\forall u &gt;u_0,\ (1-e^{-\mu_1u})\leq c\ f(u) e^{au} \leq (1+e^{-\mu_2u}).\]
+
+  <p>In our case we will say that a differentiable loss function \(\ell\) has a
+<em>tight exponential tail</em> when its negative derivative \(-\ell'\) has a
+tight exponential tail.</p>
+</div>
+
+<div class="l-page row">
+<div class="col-md-6">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/losses.png" />
+<div class="caption">
+      <p>Loss functions</p>
+    </div>
+</div>
+<div class="col-md-6">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/tight_exp_tail_losses.png" />
+<div class="caption">
+      <p>Negative derivatives of the loss functions</p>
+    </div>
+</div>
+</div>
+<div class="caption">
+  <p>Illustration of tight exponential tail property for different common loss functions. We can see that both exponential and logistic loss
+functions have a tight exponential tail. The hinge loss and 0-1 loss functions have been displayed for reference only.</p>
+</div>
+
+<p>We consider the following classification problem:</p>
+
+\[\min_{w\in \R^d} \LL(w) = \min_{w\in \R^d} \sum_{i=1}^{n}\ell(y_i w^T x_i)\]
+
+<p>where \(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\)
+and \(\ell:\R \mapsto \R^*_+\) is a surrogate loss function of the \(0\)-\(1\)
+loss.</p>
+
+<p>We will study the behavior of the solution found by gradient descent
+using a fixed learning rate \(\eta\):</p>
+
+\[w_{t+1} = w_{t} - \eta \nabla \LL(w_t) = w_{t} - \eta \sum_{i=1}^{n}\ell'(y_i w_t^T x_i)y_i x_i\]
+
+<p><a name="lemma:exploding_norm"></a></p>
+<div class="theorem l-body-outset">
+  <p><strong>Lemma 15</strong>.
+Let \(\D = \{(x_i, y_i)\}_{i=1}^{n}\) be a
+linearly separable dataset where
+\(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\) and
+\(\ell:\R \mapsto \R^*_+\) a loss function under assumptions 1 and 2. Let
+\(w_t\) be the iterates of gradient descent using learning rate
+\(0&lt;\eta&lt;\frac{2}{\beta\sigma^2_{max}(X)}\) and any starting point \(w_0\).
+Then we have:</p>
+
+  <ol>
+    <li>\(\lim_{t \xrightarrow{}\infty}\LL(w_t)=0\),</li>
+    <li>\(\lim_{t \xrightarrow{}\infty}\norm{w_t}=\infty\),</li>
+    <li>\(\forall i: \ \ \lim_{t \xrightarrow{}\infty} y_iw_t^Tx_i=\infty\),</li>
+  </ol>
+
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> As mentioned we use the exponential loss function:
+\(\ell:u \mapsto e^{-u}\), which.<br />
+Since \(\D\) is linearly separable, \(\exists w_*\) such that
+\(w_*^T x_i &gt; 0, \forall i\). Then for \(w \in \R^d\):</p>
+
+\[w_*^T\nabla \LL(w) = \sum_{i=1}^{n}  \underbrace{-exp(-y_i w^T x_i)}_{&lt;0}  \underbrace{y_i w_*^T x_i}_{&gt;0} &lt; 0.\]
+
+  <p>Therefore there is no finite critical points \(w\), for which
+\(\nabla \LL(w)=0\). But gradient descent on a smooth loss with an
+appropriate learning rate is always guaranteed to converge to a critical
+point : in other words \(\nabla \LL(w_t)\xrightarrow{}0\). This
+necessarily implies that \(\norm{w_t}\xrightarrow{}\infty\), which is (2).
+It also implies that \(\exists t_0\) s.t,
+\(\forall t&gt;t_0, \forall i: y_i w_t^T x_i&gt;0\) in order to make the
+exponential term converge to zero, this is (3). But in that case, we
+also have \(\LL(w_t)\xrightarrow{}0\), which is (1). ◻</p>
+</blockquote>
+
+<p>The norm of the previous solution diverges, but we can normalize it to
+have norm 1.</p>
+
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 16.</strong>
+Let \(\D = \{(x_i, y_i)\}_{i=1}^{n}\) be a linearly separable dataset
+where \(\forall i \in [\![ 1, n]\!], (x_i, y_i) \in \R^d\times\{-1,1\}\)
+and \(\ell:\R \mapsto \R^*_+\) a loss function with under assumptions 1, 2
+and 3. Let \(w_t\) be the iterates of gradient descent using a learning
+rate \(\eta\) such that \(0&lt;\eta&lt;\frac{2}{\beta\sigma^2_{max}(X)}\) and any
+starting point \(w_0\). Then we have:</p>
+
+\[\lim_{t \xrightarrow{}\infty}\frac{w_t}{\norm{w_t}}=\frac{w_{svm}}{\norm{w_{svm}}}\]
+
+  <p>where $w_{svm}$ is the solution to the hard margin SVM:</p>
+
+  <p>\(w_{svm} = \argmin_{w\in\R^d}\norm{w}^2\ \  s.t.\ \  y_i w^T x_i\geq 1, \forall i.\)</p>
+</div>
+
+<blockquote>
+  <p><em>Proof sketch.</em>
+We will just give the main ideas behind the proof of this theorem using
+the exponential loss function. We will furthermore assume that
+\(\frac{w_t}{\norm{w_t}}\) converges to some limit \(w_{\infty}\). For a
+detailed proof and in the more general case of the loss function having
+properties 1 to 3 please refer to Soudry et al. (2018)<d-cite key="soudry2018implicit"></d-cite>.</p>
+
+  <p>By <a href="#lemma:exploding_norm">Lemma 15</a> we have
+\(\forall i:\ \lim_{t \xrightarrow{}\infty} y_iw_t^Tx_i=\infty\). As
+\(\frac{w_t}{\norm{w_t}}\) converges to \(w_{\infty}\) we can write
+\(w_t = g(t)w_{\infty}+\rho(t)\) such that \(g(t) \xrightarrow{}\infty\),
+\(\forall i:\ y_iw^T_{\infty}x_i &gt;0\) and
+\(\ \lim_{t \xrightarrow{}\infty} \frac{\rho(t)}{g(t)}=0\). The gradient
+can then be written as:</p>
+
+\[\label{eq:neg_grad}
+- \nabla \LL(w_t) = \sum_{i=1}^{n} e^{-y_iw_t^Tx_i}x_i
+                = \sum_{i=1}^{n} e^{-g(t)y_iw_{\infty}^Tx_i}\ e^{-y_i\rho(t)^Tx_i}x_i\]
+
+  <p>We can see that as \(g(t) \xrightarrow{}\infty\) only the samples with
+the largest exponents in the sum of the right-hand side of
+the last equation will contribute to the gradient. The exponents are maximized for
+\(i \in \mathcal S = argmin_i\ y_iw_{\infty}^Tx_i\) which correspond to
+the samples minimizing the margin: i.e. the support vectors
+\(X_S = \{x_i, i \in \mathcal S\}\). The negative gradient
+\(- \nabla \LL(w_t)\) would then asymptotically become a non-negative
+linear combination of support vectors and because
+\(\norm{w_t}\xrightarrow{}\infty\) (by <a href="#lemma:exploding_norm">Lemma 15</a>) the first gradient steps will be
+negligible, and the limit \(w_{\infty}\) will get closer and closer to a
+non-negative linear combination of support vectors and so will its
+scaled version \(\hat w = w_{\infty}/\min_i y_iw_{\infty}^Tx_i\) (the
+scaling is done to make the margin of the support vectors equal to 1).
+We can therefore write:</p>
+
+\[\hat w = \sum_{i=1}^n \alpha_ix_i\quad with\ 
+\left\{
+    \begin{array}{ll}
+        \alpha_ix_i\geq 0 \ and\ y_i\hat w^T x_i=1\ if\ i\in \mathcal S\\
+       \alpha_ix_i= 0 \ and\ y_i\hat w^T x_i&gt;1\ if\ i\notin \mathcal S
+    \end{array}
+\right.\]
+
+  <p>We can recognize the KKT conditions for the hard margin SVM
+problem (see Bishop (2006)<d-cite key="bishop2006pattern"></d-cite> Chapter 7, Section 7.1) and conclude
+that \(\hat w = w_{svm}\). Then
+\(\frac{w_{\infty}}{\norm{w_{\infty}}}=\frac{w_{svm}}{\norm{w_{svm}}}\). ○</p>
+</blockquote>
+
+<p>In the proof of <a href="#lemma:exploding_norm">Lemma 15</a> we have seen that
+\(\LL(w_t)\xrightarrow{}0\). That means that gradient descent converges to
+a global minimum.</p>
+
+<p>Gradient descent has been suspected to induce a bias towards simple
+solutions, not only in these linear settings, but in deep
+learning as well, greatly improving generalization performance. It would
+explain the double descent behavior of deep learning architectures, and
+recent works such as Gissin et al. (2019)<d-cite key="gissin2019implicit"></d-cite> 
+have been studying the learning dynamics in more complex settings.</p>
+
+<p>In the <a href="/blog/2021/double-descent-3/">next blog post</a> we will explore two simple models for wich we can analyticaly prove the double descent phenomenon.</p>]]></content><author><name>Marc Lafon</name></author><summary type="html"><![CDATA[Inductive biases and the example of gradient descent.]]></summary></entry><entry><title type="html">Deep double descent explained (1/4) - Generalization error</title><link href="https://marclafon.github.io//blog/2021/double-descent-1/" rel="alternate" type="text/html" title="Deep double descent explained (1/4) - Generalization error" /><published>2021-05-15T00:00:00+00:00</published><updated>2021-05-15T00:00:00+00:00</updated><id>https://marclafon.github.io//blog/2021/double-descent-1</id><content type="html" xml:base="https://marclafon.github.io//blog/2021/double-descent-1/"><![CDATA[\[\newcommand{\R}{\mathbb{R}}
+    \newcommand{\EMC}{\text{EMC}_{P, \epsilon}(\mathcal{T})}
+    \DeclareMathOperator*{\argmin}{argmin}\]
+
+<blockquote>
+  <p>This post sets the classical statistical learning framework (following <a href="https://m2a.lip6.fr/premier-semestre/" target="\_blank">Statistical Learning course</a> by <a href="https://www.lpsm.paris/pageperso/biau/" target="\_blank">Prof. Gérard Biau</a>) and introduces the double descent phenomenon.</p>
+
+  <p>Cross-posted <a href="https://alexandrethm.github.io/blog/2021/double-descent-1/" target="\_blank">here</a> as well.</p>
+</blockquote>
+
+<p><strong>Double descent: going beyond overfitting with bigger models.</strong>
+In order to avoid overfitting, <em>conventional wisdom from statistical learning suggests using models that are not too large</em>, or using regularization techniques to control capacity. Yet, in modern deep learning practice, very large over-parameterized models (typically neural networks) are optimized to fit perfectly the training data and still obtain great generalization performance: <em>bigger models are better</em>.</p>
+
+<p>A <a href="https://arxiv.org/abs/1812.11118" target="\_blank">number</a> of <a href="https://arxiv.org/abs/1912.02292" target="\_blank">recent</a> <a href="https://arxiv.org/abs/1809.09349" target="\_blank">articles</a> have observed that, as the model capacity increases, the performance first improves then gets worse (overfitting) until a certain point where it can fit the training data perfectly (interpolation threshold). At this point, increasing model’s capacity actually seems to improve its performance again.
+This phenomenon, called <em>double descent</em> by <a href="https://arxiv.org/pdf/1812.11118.pdf" target="\_blank">Belkin et al., 2019</a> <d-cite key="Belkin2019"></d-cite>, is illustrated in the figure below.</p>
+
+<div class="l-body">
+    <div class="col-auto">
+        <img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/modeldd.svg" />
+    </div>
+</div>
+<div class="caption">
+  <p><a name="fig:double_descent_schema"></a>
+Model-wise double descent: performance after training models without early-stopping. Taken from <a href="https://openai.com/blog/deep-double-descent/" target="\_blank">this blog post</a>.</p>
+</div>
+
+<h2 id="generalization-error--classical-view-and-modern-practice">Generalization error : classical view and modern practice</h2>
+
+<h3 id="definitions-and-results-from-statistical-learning">Definitions and results from statistical learning</h3>
+
+<p>In statistical learning theory, the supervised learning problem consists of finding a good predictor \(h_n: \mathbb{R}^d \rightarrow \{0, 1\}\), based on some training data \(D_n\). The data is typically assumed to come from a certain distribution, i.e. \(D_n = \{(X_1, Y_1), \dots, (X_n, Y_n)\}\) is a collection of \(n\) i.i.d. copies of the random variables \((X, Y)\), taking values in \(\mathbb{R}^d \times \{0, 1\}\) and following a data distribution \(P(X, Y)\). We also restrict ourselves to a given class of predictors by
+choosing \(h_n \in \mathcal{H}\).</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 1</strong> (True risk).
+With \(\ell(h(X), Y) = 𝟙_{(h(X) \neq Y)}\) the 0-1 loss, the
+<em>true risk</em> (or <em>true error</em>) of a predictor
+\(h: \mathbb{R}^d \rightarrow \{0, 1\}\) is defined as</p>
+
+\[L(h) = \mathbb{E}[\ell(h(X), Y)] = \mathbb{P}(h(X) \neq Y)\]
+
+  <p>The true risk is also called the <em>expected risk</em> or the <em>generalization error</em>.</p>
+</div>
+
+<blockquote>
+  <p><strong>Remark 1.</strong>
+<em>We choose in this section a classification setting, but a regression
+setting can be adopted as well, for instance with \(Y\) and \(h_n\) taking
+values in \(\mathbb{R}\) (which we will sometimes do in the subsequent
+sections). In this case, the 0-1 loss is replaced by other loss
+functions, such as the squared error loss</em>
+\(\ell(\hat{y}, y) = (\hat{y} - y)^2\).</p>
+</blockquote>
+
+<p>In practice, the true distribution of \((X, Y)\) is unknown, so we have to
+resort to a proxy measure based on the available data.</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 2</strong> (Empirical risk).
+The <em>empirical risk</em> of a predictor
+\(h: \mathbb{R}^d \rightarrow \mathbb{R}\) on a training set \(D_n\) is
+defined as:</p>
+
+\[L_n(h) = \frac{1}{n} \sum_{i=1}^{n} \ell(h(X_i), Y_i)\]
+
+</div>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 3</strong> (Bayes risk).
+A predictor \(h^*: \mathbb{R}^d \rightarrow \{0, 1\}\) minimizing the true
+risk, i.e. verifying</p>
+
+\[L(h^*) = \inf_{h: \mathbb{R}^d \rightarrow \{0, 1\}} L(h)\]
+
+  <p>is called a <em>Bayes estimator</em>. Its risk \(L^* = L(h^*)\) is called the <em>Bayes risk</em>.</p>
+</div>
+
+<p>Using \(D_n\), our objective is to find a predictor \(h_n\) as close as
+possible to \(h^*\).</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 4</strong> (Consistency).
+A predictor \(h_n\) is <em>consistent</em> if</p>
+
+\[\mathbb{E} L(h_n) \underset{n \rightarrow \infty}{\rightarrow} L^*\]
+
+</div>
+
+<p>The <em>empirical risk minimization (ERM)</em> approach <d-cite key="Vapnik1992"></d-cite>
+consists in choosing a predictor that minimizes the empirical risk on \(D_n\) :
+\(h_n^*\in \text{argmin}_{h \in \mathcal{H}} L_n(h)\). This is something
+that can be done or approximated in practice, thanks to a wide range of
+algorithms and optimization procedures, but it is also necessary to
+ensure that our predictor \(h_n^*\) performs well in general and not only
+on training data. Depending on the chosen class of predictors
+\(\mathcal{H}\), statistical learning theory can give us guarantees or
+insights to make sure \(h_n^*\) generalizes well to unseen data.</p>
+
+<h3 id="classical-view">Classical view</h3>
+
+<p>The gap between any predictor \(h_n \in \mathcal{H}\) and an optimal predictor \(h^*\) can be
+decomposed as follows.
+\(L(h_n) - L^*= \underbrace{L(h_n) - \inf_{h \in \mathcal{H}} L(h)}_{\text{estimation error}} +
+    \underbrace{\inf_{h \in \mathcal{H}} L(h) - L^*}_{\text{approximation error}}\)</p>
+
+<blockquote>
+  <p><strong>Remark 2.</strong>
+<em>In addition to the approximation error (approximating reality with a
+model) and estimation error (learning a model with finite data) which
+fits in the statistical learning framework and are the focus of this
+post, there is actually another source of error, the <strong>optimization
+error</strong>. This is the gap between the risk of the predictor returned by
+the optimization procedure (e.g. SGD) and an empirical risk minimizer \(h_n^*\).</em></p>
+</blockquote>
+
+<div class="theorem l-body-outset">
+  <p><strong>Proposition 5.</strong> <a name="prop:classical-bound"></a>
+For any empirical risk minimizer
+\(h_n^* \in \text{argmin}_{h \in \mathcal{H}} L_n(h)\), the estimation
+error verifies</p>
+
+\[L(h_n^*) - \inf_{h \in \mathcal{H}} L(h) \leq 2 \sup_{h \in \mathcal{H}} |L_n(h) - L(h)|\]
+
+  <p>The term \(|L_n(h) - L(h)|\) is the <em>generalization gap</em>. It is the gap between the empirical risk and the true risk, in other words the difference between a model’s performance on training data and its performance on unseen data drawn from the same distribution.</p>
+</div>
+
+<blockquote>
+  <p><em>Proof.</em> We have</p>
+
+\[L(h_n^*) - \inf_{h \in \mathcal{H}} L(h)
+\leq |L(h_n^*) - L_n(h_n^*)| + |L_n(h_n^*) - \inf_{h \in \mathcal{H}} L(h)|\]
+
+  <p>With</p>
+
+\[|L(h_n^*) - L_n(h_n^*)|
+\leq \sup_{h \in \mathcal{H}} |L_n(h) - L(h)|\]
+
+  <p>since \(h_n^*\in \mathcal{H}\), and :</p>
+
+\[|L_n(h_n^*) - \inf_{h \in \mathcal{H}} L(h)|
+= |\inf_{h \in \mathcal{H}}L_n(h) - \inf_{h \in \mathcal{H}} L(h)|
+\leq \sup_{h \in \mathcal{H}} |L_n(h) - L(h)|\]
+
+  <p>after separating the cases where
+\(|\inf_{h \in \mathcal{H}}L_n(h) - \inf_{h \in \mathcal{H}} L(h)| &gt; 0\)
+and
+\(|\inf_{h \in \mathcal{H}}L_n(h) - \inf_{h \in \mathcal{H}} L(h)| &lt; 0\). ◻</p>
+</blockquote>
+
+<p>The classical machine learning strategy is to find the right
+\(\mathcal{H}\) to keep both the approximation error and the estimation
+error low.</p>
+
+<ol>
+  <li>
+    <p>When \(\mathcal{H}\) is too small, no predictor \(h \in \mathcal{H}\) is
+ able to model the complexity of the data and to approach the Bayes
+ risk. This is called <em>underfitting</em>.</p>
+  </li>
+  <li>
+    <p>When \(\mathcal{H}\) is too large, the bound from <a href="#prop:classical-bound">proposition 5</a>
+ (maximal generalization gap over \(\mathcal{H}\)) will increase, and the chosen empirical risk
+ minimizer \(h_n^*\) may generalize poorly despite having a low
+ training error. This is called <em>overfitting</em>.</p>
+  </li>
+</ol>
+
+<blockquote>
+  <p><strong>Remark 3.</strong>
+<em>Similarly, the expected error can also be decomposed into a bias term
+due to model mis-specification and a variance term due to random noise
+being modeled by \(h_n^*\). This is the <strong>bias-variance trade-off</strong>, and is
+also highly dependent on the capacity of \(\mathcal{H}\), the chosen class
+of predictors.</em></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Exercise 1</strong> (Bias-Variance decomposition).
+Assume that \(Y = h(X) + \epsilon\), with
+\(\mathbb{E}[\epsilon] = 0, Var(\epsilon) = \sigma^2\). Show that, for any
+\(x \in \mathbb{R}^d\), the expected error of a predictor \(h_n\) obtained
+with the random dataset \(D_n\) is :</p>
+
+\[\mathbb{E}[(Y - h_n(X))^2 | X=x] = (h(x) - \mathbb{E}h_n(x))^2 + \mathbb{E}[(\mathbb{E}h_n(x) - h_n(x))^2] + \sigma^2\]
+</blockquote>
+
+<p>In order to ensure a consistent estimator \(h_n\), we can control
+\(\mathcal{H}\) explicitly e.g. by choosing the number of features used in
+a linear classifier, or the number of layers of a neural network.</p>
+
+<div class="theorem l-body-outset">
+  <p><strong>Theorem 6</strong> (Vapnik-Chervonenkis inequality).
+For any data distribution \(P(X,Y)\), by using \(V_{\mathcal{H}}\) the
+VC-dimension of the class \(\mathcal{H}\) as a measure of the class
+complexity, one has</p>
+
+\[\mathbb{E} \sup_{h\in\mathcal{H}} |L_n(h) - L(h)|
+    \leq 4 \sqrt{\frac{V_{\mathcal{H}} \log(n+1)}{n}}\]
+
+</div>
+
+<p>A complete introduction to Vapnik-Chervonenkis theory is outside the
+scope of this post, but <a href="https://datascience.stackexchange.com/questions/32557/what-is-the-exact-definition-of-vc-dimension">VC-dimension</a> \(V_{\mathcal{H}}\) can be defined as the
+cardinality of the largest set of points that can be shattered, i.e.
+there is at least one \(h \in \mathcal{H}\) that can assign all possible
+labels to the set. Combining this result with <a href="#prop:classical-bound">proposition 5</a>
+gives a useful bound on the generalization error for a number of model classes. For instance, if
+\(\mathcal{H}\) is a class of linear classifiers using \(d\) features
+(potentially non-linear transformations of input \(x\)), then we have :</p>
+
+\[V_{\mathcal{H}} \leq d+1\]
+
+<p>Other measures of the richness of the model class \(\mathcal{H}\) also
+exist, such as the <a href="https://en.wikipedia.org/wiki/Rademacher_complexity">Rademacher complexity</a>, and can be useful in
+situations where \(V_{\mathcal{H}} = +\infty\), or in regression settings.</p>
+
+<h3 id="modern-practice">Modern practice</h3>
+
+<p>Following results from the <a href="#definitions-and-results-from-statistical-learning">first section</a>,
+a widely adopted view is that, after a
+certain threshold, “larger models are worse” as they will overfit and
+generalize poorly. Yet, in modern machine learning practice, very large
+models with enough parameters to reach almost zero training error are
+frequently used. Such models are able to fit almost perfectly (i.e.
+<em>interpolate</em>) the training data and still generalize well, actually
+performing better than smaller models (e.g. to classify 1.2M examples,
+AlexNet had 60M parameters and VGG-16 and VGG-19 both exceeded 100M
+parameters <d-cite key="Canziani2016"></d-cite>). Understanding generalization of
+overparameterized models in modern deep learning is an active field of
+research, and we focus on the <em>double descent</em> phenomenon, first
+demonstrated by <a href="https://arxiv.org/pdf/1812.11118.pdf" target="\_blank">Belkin et al., 2019</a> <d-cite key="Belkin2019"></d-cite> and illustrated below.</p>
+
+<div class="l-page">
+    <div class="col-auto">
+        <img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/double_descent_schema.png" />
+    </div>
+</div>
+<div class="caption">
+  <p><a name="fig:double_descent_schema"></a>
+<strong>Figure 1.</strong> The <em>classical risk curve</em> arising from the bias-variance trade-off
+and the <em>double descent risk curve</em> with the observed modern
+interpolation regime. Taken from <a href="https://arxiv.org/pdf/1812.11118.pdf" target="\_blank">Belkin et al., 2019</a> <d-cite key="Belkin2019"></d-cite>.</p>
+</div>
+
+<p>For simpler class of models, classical statistical learning guarantee
+that the test risk decreases when the class of models gets more complex,
+until a point where the bounds do not control the risk anymore. However
+it seems that, beyond a certain threshold, increasing the capacity of
+the models actually decreases the test risk again. This is the “modern”
+interpolating regime, with overparameterized models. As this phenomenon
+depends not only on the class of predictors \(\mathcal{H}\), but also on
+the training algorithm and regularization techniques, we define a
+<em>training procedure</em> \(\mathcal{T}\) to be any procedure that takes as
+input a dataset \(D_n\) and outputs a classifier \(h_n\), i.e.
+\(h_n = \mathcal{T}(D_n) \in \mathcal{H}\). We can now make an informal
+hypothesis, after defining the notion of <em>effective model complexity</em>
+(from <a href="" target="\_blank">Nakkiran et al.</a> <d-cite key="Nakkiran2019"></d-cite>).</p>
+
+<div class="definition l-body-outset">
+  <p><strong>Definition 7</strong> (Effective Model Complexity).
+The <em>Effective Model Complexity (EMC)</em> of a training procedure
+\(\mathcal{T}\), w.r.t. distribution \(P(X,Y)\), is the maximum number of
+samples \(n\) on which \(\mathcal{T}\) achieves on average \(\approx 0\)
+training error. That is, for \(\epsilon &gt; 0\):</p>
+
+\[\EMC = \max\{n \in \mathbb{N} | \mathbb{E} L(h_n) \leq \epsilon\}\]
+
+</div>
+
+<div class="theorem l-body-outset">
+  <p><strong>Hypothesis</strong> (Generalized Double Descent hypothesis, informal).
+For any data distribution \(P(X,Y)\), neural-network-based training
+procedure \(\mathcal{T}\), and small \(\epsilon &gt; 0\), if we consider the
+task of predicting labels based on \(n\) samples from \(P\) then, as
+illustrated on <a href="#fig:double_descent_schema">figure 1</a>:</p>
+
+  <ul>
+    <li>
+      <p><em>Under-parameterized regime</em>. If \(\EMC\) is sufficiently smaller than
+  n, any perturbation of \(\mathcal{T}\) that increases its effective
+  complexity will decrease the test error.</p>
+    </li>
+    <li>
+      <p><em>Critically parameterized regime</em>. If \(\EMC \approx n\), then a
+  perturbation of \(\mathcal{T}\) that increases its effective
+  complexity might decrease or increase the test error.</p>
+    </li>
+    <li>
+      <p><em>Over-parameterized regime</em>. If \(\EMC\) is sufficiently larger than
+  n, any perturbation of \(\mathcal{T}\) that increases its effective
+  complexity will decrease the test error.</p>
+    </li>
+  </ul>
+
+</div>
+
+<p>Empirically, this definition of effective model capacity translates into
+multiple axis along which the double descent can be observed :
+<em>epoch-wise</em>, <em>model-wise</em> (e.g. increasing the width of convolutional
+layers or the embedding dimension of transformers) and even with
+regularization, by decreasing weight decay.</p>
+
+<p>The double descent along different axis of effective model capacity
+is illustrated in the figures below:</p>
+
+<div class="l-page row">
+<div class="col-md-6">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/openai_test.png" />
+<div class="caption">
+      <p><em>Test error as a function of model size and train epochs</em></p>
+    </div>
+</div>
+<div class="col-md-6">
+<img class="img-fluid rounded z-depth-1" src="/assets/img/posts/double-descent/openai_train.png" />
+<div class="caption">
+      <p><em>Train error of the corresponding models</em></p>
+    </div>
+</div>
+</div>
+
+<div class="caption">
+  <p><strong>Figure 2.</strong> All models are Resnet18s trained on CIFAR-10 with 15% label noise (training labels artificially made incorrect), data-augmentation, and Adam for up to 4K epochs. Taken from from <a href="" target="\_blank">Nakkiran et al.</a> <d-cite key="Nakkiran2019"></d-cite></p>
+</div>
+
+<p>In the <a href="/blog/2021/double-descent-2/">next blog post</a> we will talk about the role of inductive biases (including gradient descent) in the double descent phenomenon.</p>]]></content><author><name>Marc Lafon</name></author><summary type="html"><![CDATA[A blog post series on the phenomenon of double descent and the role of inductive biases in deep learning.]]></summary></entry></feed>
