@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: ML Consultant - PhD Student in Deep Learning at Cnam Paris
+subtitle: PhD Student in Deep Learning at Cnam Paris - AI/ML Consultant
 
 profile:
   align: right
@@ -13,13 +13,14 @@ profile:
     <p>2 rue Conté</p>
     <p>Paris, France</p>
 
-news: false  # includes a list of news items
+news: true  # includes a list of news items
 latest_posts: false  # includes a list of the newest posts
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-I am a PhD student in Deep Learning at CNAM in the <a href="https://cedric2-demo.cnam.fr/equipes/vertigo/">Vertigo Team</a> advised by <a href="https://cedric.cnam.fr/~thomen/">Prof. Nicolas Thome</a> and  <a href="https://cedric.cnam.fr/~rambourc/">Clément Rambour</a>. 
+I am a PhD student in Deep Learning at Le Cnam in the <a href="https://cedric2-demo.cnam.fr/equipes/vertigo/">Machine Learning team</a>  advised by <a href="https://thome.isir.upmc.fr/">Prof. Nicolas Thome</a> and  <a href="https://cedric.cnam.fr/~rambourc/">Clément Rambour</a>. The focus of my PhD is on the efficient adaptation of deep learning foundation models with a particular interest in improving their robustness. Lately, I have focused on improving the trade-off between accuracy and robustness for few-shot learning methods, e.g. prompt learning, of vision-language foundation models like CLIP.
+
 
 [//]: # ()
 [//]: # (Write your biography here. Tell the world about yourself. Link to your favorite [subreddit]&#40;http://reddit.com&#41;. You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.)
