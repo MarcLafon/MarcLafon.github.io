@@ -1,8 +1,8 @@
 ---
 layout: post
-date: 2023-04-22 15:59:00-0400
+date: 2024-06-12 15:59:00-0400
 inline: true
 related_posts: false
 ---
 
-Our work on out-of-distribution detection using energy-based models has been accepted at ICML 2023 🎉🎉
+Our work on few-shot adaptation of vision-language models through prompt learning has been accepted at ECCV 2024 :sparkles: :tada: !
