@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our work on spatio-temporal encodings for Transformers on dynamic graphs has been accepted at NeurIPS 2024 :smile: !
+Our work on spatio-temporal encodings for Transformers on dynamic graphs has been accepted at NeurIPS 2024 :smiley: !
