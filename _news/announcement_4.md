@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Our work on failure prediction of vision-language models has been accepted at ICCV 2025 :smile:
+Our work on failure prediction of vision-language models has been accepted at ICCV 2025 :star: !
