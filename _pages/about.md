@@ -9,8 +9,8 @@ profile:
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   address: >
-    <p>Office 37.0E.36</p>
-    <p>2 rue Conté</p>
+    <p>Pyramide - Office J13</p>
+    <p>4 Place Jussieu</p>
     <p>Paris, France</p>
 
 news: true  # includes a list of news items
