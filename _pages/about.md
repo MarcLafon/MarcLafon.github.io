@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: PhD Student in Deep Learning at Cnam Paris - AI/ML Consultant
+subtitle: Postdoctoral student in Deep Learning at Sorbonne University Paris - ISIR Lab
 
 profile:
   align: right
@@ -19,7 +19,7 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-I am a PhD student in Deep Learning at Le Cnam in the <a href="https://cedric2-demo.cnam.fr/equipes/vertigo/">Machine Learning team</a>  advised by <a href="https://thome.isir.upmc.fr/">Prof. Nicolas Thome</a> and  <a href="https://cedric.cnam.fr/~rambourc/">Clément Rambour</a>. The focus of my PhD is on the efficient adaptation of deep learning foundation models with a particular interest in improving their robustness. Lately, I have focused on improving the trade-off between accuracy and robustness for few-shot learning methods, e.g. prompt learning, of vision-language foundation models like CLIP.
+I am a postdoctoral student in deep learning in the <a href="https://www.isir.upmc.fr/equipes/mlia/">MLIA team</a>  of the Sorbonne University ISIR lab. Previously, I was a PhD student at Cnam in the <a href="https://cedric2-demo.cnam.fr/equipes/vertigo/">Machine Learning team</a>  advised by <a href="https://thome.isir.upmc.fr/">Prof. Nicolas Thome</a> and  <a href="https://cedric.cnam.fr/~rambourc/">Clément Rambour</a>. My research focus on improving the adaptability and safety of foundation models.
 
 
 [//]: # ()
