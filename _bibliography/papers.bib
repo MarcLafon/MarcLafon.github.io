@@ -1,6 +1,34 @@
 ---
 ---
 
+@article{Lafon2025,
+bibtex_show={true},
+author = {Lafon, Marc and Vargas Hakim, Gustavo Adolfo, and Rambour, Clément and Desrosier, Christian and Thome, Nicolas},
+pdf={https://arxiv.org/abs/2507.14312},
+journal = { Conference on Neural Information Processing Systems (NeurIPS 2025)},
+title = {{CLIPTTA: Robust Contrastive Vision-Language
+Test-Time Adaptation}},
+year = {2025},
+abstract={Vision-language models (VLMs) like CLIP exhibit strong zero-shot capabilities
+but often fail to generalize under distribution shifts. Test-time adaptation (TTA)
+allows models to update at inference time without labeled data, typically via
+entropy minimization. However, this objective is fundamentally misaligned with
+the contrastive image-text training of VLMs, limiting adaptation performance
+and introducing failure modes such as pseudo-label drift and class collapse. We
+propose CLIPTTA, a new gradient-based TTA method for vision-language models
+that leverages a soft contrastive loss aligned with CLIP’s pre-training objective.
+We provide a theoretical analysis of CLIPTTA ’s gradients, showing how its batch-aware
+ design mitigates the risk of collapse. We further extend CLIPTTA to the
+open-set setting, where both in-distribution (ID) and out-of-distribution (OOD)
+samples are encountered, using an Outlier Contrastive Exposure (OCE) loss to
+improve OOD detection. Evaluated on 75 datasets spanning diverse distribution
+shifts, CLIPTTA consistently outperforms entropy-based objectives and is highly
+competitive with state-of-the-art TTA methods, outperforming them on a large
+number of datasets and exhibiting more stable performance across diverse shifts.},
+selected={true},
+abbr={NeurIPS}
+}
+
 @article{LafonKarmim2025,
 bibtex_show={true},
 author = {Lafon, Marc and Karmim, Yannis and Silva-Rodríguez, Julio and Couairon, Paul and Rambour, Clément
@@ -69,7 +97,7 @@ Learning, Honolulu, Hawaii, USA. PMLR 202, 2023},
 title = {{Hybrid Energy Based Model in the Feature Space for Out-of-Distribution Detection}},
 year = {2023},
 abstract={Out-of-distribution (OOD) detection is a critical requirement for the deployment of deep neural networks. This paper introduces the HEAT model, a new post-hoc OOD detection method estimating the density of in-distribution (ID) samples using hybrid energy-based models (EBM) in the feature space of a pre-trained backbone. HEAT complements prior density estimators of the ID density, e.g. parametric models like the Gaussian Mixture Model (GMM), to provide an accurate yet robust density estimation. A second contribution is to leverage the EBM framework to provide a unified density estimation and to compose several energy terms. Extensive experiments demonstrate the significance of the two contributions. HEAT sets new state-of-the-art OOD detection results on the CIFAR-10 / CIFAR100 benchmark as well as on the large-scale Imagenet benchmark. The code is available at: github.com/MarcLafon/heatood.},
-selected={true},
+selected={false},
 abbr={ICML}
 }
 
@@ -93,7 +121,7 @@ journal = {ICML Workshop on Uncertainty and Robustness in Deep Learning},
 title = {{Beyond First-Order Uncertainty Estimation with Evidential Models for Open-World Recognition}},
 year = {2021},
 abstract={In this paper, we tackle the challenge of jointly quantifying in-distribution and out-of-distribution (OOD) uncertainties. We introduce KLoS, a KL-divergence measure defined on the class-probability simplex. By leveraging the second-order uncertainty representation provided by evi-dential models, KLoS captures more than existing first-order uncertainty measures such as predic-tive entropy. We design an auxiliary neural network , KLoSNet, to learn a refined measure directly aligned with the evidential training objective. Experiments show that KLoSNet acts as a class-wise density estimator and outperforms current uncertainty measures in the realistic context where no OOD data is available during training. We also report comparisons in the presence of OOD training samples, which shed a new light on the impact of the vicinity of this data with OOD test data.},
-selected={true},
+selected={false},
 abbr={ICML}
 }
 
