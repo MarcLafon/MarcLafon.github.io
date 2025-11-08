@@ -133,7 +133,91 @@
             <!-- _pages/publications.md -->
 <div class="publications">
   <h2 class="year">2025</h2>
-  <ol class="bibliography"><li>
+  <ol class="bibliography">
+<li>
+<!-- _layouts/bib.html -->
+      <div class="row">
+        <div class="col-sm-2 abbr"><abbr class="badge">NeurIPS</abbr></div>
+
+        <!-- Entry bib key -->
+        <div id="Lafon2025" class="col-sm-8">
+        <!-- Title -->
+        <div class="title">CLIPTTA: Robust Contrastive Vision-Language
+Test-Time Adaptation</div>
+        <!-- Author -->
+        <div class="author">
+        
+
+        <em>Marc Lafon</em>, Gustavo Adolfo Vargas Hakim, Clément Rambour, and
+          <span class="more-authors" title="click to view 2 more authors" onclick="
+                var element = $(this);
+                element.attr('title', '');
+                var more_authors_text = element.text() == '2 more authors' ? 'Christian Desrosier, Nicolas Thome' : '2 more authors';
+                var cursorPosition = 0;
+                var textAdder = setInterval(function(){
+                  element.text(more_authors_text.substring(0, cursorPosition + 1));
+                  if (++cursorPosition == more_authors_text.length){
+                    clearInterval(textAdder);
+                  }
+              }, '10');
+              ">2 more authors</span>
+</div>
+
+        <!-- Journal/Book title and date -->
+        
+        
+        <div class="periodical">
+          <em> Conference on Neural Information Processing Systems (NeurIPS 2025)</em>, 2025
+        </div>
+        <div class="periodical">
+          
+        </div>
+
+          <!-- Links/Buttons -->
+          <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
+            <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+            <a href="https://arxiv.org/abs/2507.14312" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">PDF</a>
+          </div>
+          
+          <div class="badges">
+            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
+              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
+          </div>
+
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>Vision-language models (VLMs) like CLIP exhibit strong zero-shot capabilities
+but often fail to generalize under distribution shifts. Test-time adaptation (TTA)
+allows models to update at inference time without labeled data, typically via
+entropy minimization. However, this objective is fundamentally misaligned with
+the contrastive image-text training of VLMs, limiting adaptation performance
+and introducing failure modes such as pseudo-label drift and class collapse. We
+propose CLIPTTA, a new gradient-based TTA method for vision-language models
+that leverages a soft contrastive loss aligned with CLIP’s pre-training objective.
+We provide a theoretical analysis of CLIPTTA ’s gradients, showing how its batch-aware
+ design mitigates the risk of collapse. We further extend CLIPTTA to the
+open-set setting, where both in-distribution (ID) and out-of-distribution (OOD)
+samples are encountered, using an Outlier Contrastive Exposure (OCE) loss to
+improve OOD detection. Evaluated on 75 datasets spanning diverse distribution
+shifts, CLIPTTA consistently outperforms entropy-based objectives and is highly
+competitive with state-of-the-art TTA methods, outperforming them on a large
+number of datasets and exhibiting more stable performance across diverse shifts.</p>
+          </div>
+<!-- Hidden bibtex block -->
+          <div class="bibtex hidden">
+            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">Lafon2025</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Lafon, Marc and Vargas Hakim, Gustavo Adolfo and Rambour, Clément and Desrosier, Christian and Thome, Nicolas}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{ Conference on Neural Information Processing Systems (NeurIPS 2025)}</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{{CLIPTTA: Robust Contrastive Vision-Language
+  Test-Time Adaptation}}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+          </div>
+        </div>
+      </div>
+</li>
+<li>
 <!-- _layouts/bib.html -->
       <div class="row">
         <div class="col-sm-2 abbr"><abbr class="badge">ICCV</abbr></div>
@@ -207,7 +291,8 @@ Ablation studies highlight the critical role of our architecture and training in
           </div>
         </div>
       </div>
-</li></ol>
+</li>
+</ol>
 
   <h2 class="year">2024</h2>
   <ol class="bibliography">

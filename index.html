@@ -215,6 +215,89 @@
 <li>
 <!-- _layouts/bib.html -->
       <div class="row">
+        <div class="col-sm-2 abbr"><abbr class="badge">NeurIPS</abbr></div>
+
+        <!-- Entry bib key -->
+        <div id="Lafon2025" class="col-sm-8">
+        <!-- Title -->
+        <div class="title">CLIPTTA: Robust Contrastive Vision-Language
+Test-Time Adaptation</div>
+        <!-- Author -->
+        <div class="author">
+        
+
+        <em>Marc Lafon</em>, Gustavo Adolfo Vargas Hakim, Clément Rambour, and
+          <span class="more-authors" title="click to view 2 more authors" onclick="
+                var element = $(this);
+                element.attr('title', '');
+                var more_authors_text = element.text() == '2 more authors' ? 'Christian Desrosier, Nicolas Thome' : '2 more authors';
+                var cursorPosition = 0;
+                var textAdder = setInterval(function(){
+                  element.text(more_authors_text.substring(0, cursorPosition + 1));
+                  if (++cursorPosition == more_authors_text.length){
+                    clearInterval(textAdder);
+                  }
+              }, '10');
+              ">2 more authors</span>
+</div>
+
+        <!-- Journal/Book title and date -->
+        
+        
+        <div class="periodical">
+          <em> Conference on Neural Information Processing Systems (NeurIPS 2025)</em>, 2025
+        </div>
+        <div class="periodical">
+          
+        </div>
+
+          <!-- Links/Buttons -->
+          <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
+            <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+            <a href="https://arxiv.org/abs/2507.14312" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">PDF</a>
+          </div>
+          
+          <div class="badges">
+            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
+              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
+          </div>
+
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>Vision-language models (VLMs) like CLIP exhibit strong zero-shot capabilities
+but often fail to generalize under distribution shifts. Test-time adaptation (TTA)
+allows models to update at inference time without labeled data, typically via
+entropy minimization. However, this objective is fundamentally misaligned with
+the contrastive image-text training of VLMs, limiting adaptation performance
+and introducing failure modes such as pseudo-label drift and class collapse. We
+propose CLIPTTA, a new gradient-based TTA method for vision-language models
+that leverages a soft contrastive loss aligned with CLIP’s pre-training objective.
+We provide a theoretical analysis of CLIPTTA ’s gradients, showing how its batch-aware
+ design mitigates the risk of collapse. We further extend CLIPTTA to the
+open-set setting, where both in-distribution (ID) and out-of-distribution (OOD)
+samples are encountered, using an Outlier Contrastive Exposure (OCE) loss to
+improve OOD detection. Evaluated on 75 datasets spanning diverse distribution
+shifts, CLIPTTA consistently outperforms entropy-based objectives and is highly
+competitive with state-of-the-art TTA methods, outperforming them on a large
+number of datasets and exhibiting more stable performance across diverse shifts.</p>
+          </div>
+<!-- Hidden bibtex block -->
+          <div class="bibtex hidden">
+            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">Lafon2025</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Lafon, Marc and Vargas Hakim, Gustavo Adolfo and Rambour, Clément and Desrosier, Christian and Thome, Nicolas}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{ Conference on Neural Information Processing Systems (NeurIPS 2025)}</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{{CLIPTTA: Robust Contrastive Vision-Language
+  Test-Time Adaptation}}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+          </div>
+        </div>
+      </div>
+</li>
+<li>
+<!-- _layouts/bib.html -->
+      <div class="row">
         <div class="col-sm-2 abbr"><abbr class="badge">ICCV</abbr></div>
 
         <!-- Entry bib key -->
@@ -348,140 +431,6 @@ Ablation studies highlight the critical role of our architecture and training in
   <span class="na">journal</span> <span class="p">=</span> <span class="s">{Proceedings of the 18th European Conference on Computer Vision, Milan, Italy, 2024}</span><span class="p">,</span>
   <span class="na">title</span> <span class="p">=</span> <span class="s">{{GalLoP: Learning Global and Local Prompts for Vision-Language Models}}</span><span class="p">,</span>
   <span class="na">year</span> <span class="p">=</span> <span class="s">{2024}</span><span class="p">,</span>
-<span class="p">}</span></code></pre></figure>
-          </div>
-        </div>
-      </div>
-</li>
-<li>
-<!-- _layouts/bib.html -->
-      <div class="row">
-        <div class="col-sm-2 abbr"><abbr class="badge">ICML</abbr></div>
-
-        <!-- Entry bib key -->
-        <div id="Lafon2023" class="col-sm-8">
-        <!-- Title -->
-        <div class="title">Hybrid Energy Based Model in the Feature Space for Out-of-Distribution Detection</div>
-        <!-- Author -->
-        <div class="author">
-        
-
-        <em>Marc Lafon</em>, Elias Ramzi, Clément Rambour, and
-          <span class="more-authors" title="click to view 1 more author" onclick="
-                var element = $(this);
-                element.attr('title', '');
-                var more_authors_text = element.text() == '1 more author' ? 'Nicolas Thome' : '1 more author';
-                var cursorPosition = 0;
-                var textAdder = setInterval(function(){
-                  element.text(more_authors_text.substring(0, cursorPosition + 1));
-                  if (++cursorPosition == more_authors_text.length){
-                    clearInterval(textAdder);
-                  }
-              }, '10');
-              ">1 more author</span>
-</div>
-
-        <!-- Journal/Book title and date -->
-        
-        
-        <div class="periodical">
-          <em>Proceedings of the 40 th International Conference on Machine
-Learning, Honolulu, Hawaii, USA. PMLR 202, 2023</em>, 2023
-        </div>
-        <div class="periodical">
-          
-        </div>
-
-          <!-- Links/Buttons -->
-          <div class="links">
-            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
-            <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
-            <a href="https://arxiv.org/pdf/2305.16966.pdf" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">PDF</a>
-          </div>
-          
-          <div class="badges">
-            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
-              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
-          </div>
-
-          <!-- Hidden abstract block -->
-          <div class="abstract hidden">
-            <p>Out-of-distribution (OOD) detection is a critical requirement for the deployment of deep neural networks. This paper introduces the HEAT model, a new post-hoc OOD detection method estimating the density of in-distribution (ID) samples using hybrid energy-based models (EBM) in the feature space of a pre-trained backbone. HEAT complements prior density estimators of the ID density, e.g. parametric models like the Gaussian Mixture Model (GMM), to provide an accurate yet robust density estimation. A second contribution is to leverage the EBM framework to provide a unified density estimation and to compose several energy terms. Extensive experiments demonstrate the significance of the two contributions. HEAT sets new state-of-the-art OOD detection results on the CIFAR-10 / CIFAR100 benchmark as well as on the large-scale Imagenet benchmark. The code is available at: github.com/MarcLafon/heatood.</p>
-          </div>
-<!-- Hidden bibtex block -->
-          <div class="bibtex hidden">
-            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">Lafon2023</span><span class="p">,</span>
-  <span class="na">author</span> <span class="p">=</span> <span class="s">{Lafon, Marc and Ramzi, Elias and Rambour, Clément and Thome, Nicolas}</span><span class="p">,</span>
-  <span class="na">journal</span> <span class="p">=</span> <span class="s">{Proceedings of the 40 th International Conference on Machine
-  Learning, Honolulu, Hawaii, USA. PMLR 202, 2023}</span><span class="p">,</span>
-  <span class="na">title</span> <span class="p">=</span> <span class="s">{{Hybrid Energy Based Model in the Feature Space for Out-of-Distribution Detection}}</span><span class="p">,</span>
-  <span class="na">year</span> <span class="p">=</span> <span class="s">{2023}</span><span class="p">,</span>
-<span class="p">}</span></code></pre></figure>
-          </div>
-        </div>
-      </div>
-</li>
-<li>
-<!-- _layouts/bib.html -->
-      <div class="row">
-        <div class="col-sm-2 abbr"><abbr class="badge">ICML</abbr></div>
-
-        <!-- Entry bib key -->
-        <div id="Corbiere2021" class="col-sm-8">
-        <!-- Title -->
-        <div class="title">Beyond First-Order Uncertainty Estimation with Evidential Models for Open-World Recognition</div>
-        <!-- Author -->
-        <div class="author">
-        
-
-        Charles Corbière, <em>Marc Lafon</em>, Nicolas Thome, and
-          <span class="more-authors" title="click to view 2 more authors" onclick="
-                var element = $(this);
-                element.attr('title', '');
-                var more_authors_text = element.text() == '2 more authors' ? 'Matthieu Cord, Patrick Pérez' : '2 more authors';
-                var cursorPosition = 0;
-                var textAdder = setInterval(function(){
-                  element.text(more_authors_text.substring(0, cursorPosition + 1));
-                  if (++cursorPosition == more_authors_text.length){
-                    clearInterval(textAdder);
-                  }
-              }, '10');
-              ">2 more authors</span>
-</div>
-
-        <!-- Journal/Book title and date -->
-        
-        
-        <div class="periodical">
-          <em>ICML Workshop on Uncertainty and Robustness in Deep Learning</em>, 2021
-        </div>
-        <div class="periodical">
-          
-        </div>
-
-          <!-- Links/Buttons -->
-          <div class="links">
-            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
-            <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
-            <a href="http://www.gatsby.ucl.ac.uk/\~balaji/udl2021/accepted-papers/UDL2021-paper-062.pdf" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">PDF</a>
-          </div>
-          
-          <div class="badges">
-            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
-              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
-          </div>
-
-          <!-- Hidden abstract block -->
-          <div class="abstract hidden">
-            <p>In this paper, we tackle the challenge of jointly quantifying in-distribution and out-of-distribution (OOD) uncertainties. We introduce KLoS, a KL-divergence measure defined on the class-probability simplex. By leveraging the second-order uncertainty representation provided by evi-dential models, KLoS captures more than existing first-order uncertainty measures such as predic-tive entropy. We design an auxiliary neural network , KLoSNet, to learn a refined measure directly aligned with the evidential training objective. Experiments show that KLoSNet acts as a class-wise density estimator and outperforms current uncertainty measures in the realistic context where no OOD data is available during training. We also report comparisons in the presence of OOD training samples, which shed a new light on the impact of the vicinity of this data with OOD test data.</p>
-          </div>
-<!-- Hidden bibtex block -->
-          <div class="bibtex hidden">
-            <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">Corbiere2021</span><span class="p">,</span>
-  <span class="na">author</span> <span class="p">=</span> <span class="s">{Corbière, Charles and Lafon, Marc and Thome, Nicolas and Cord, Matthieu and Pérez, Patrick}</span><span class="p">,</span>
-  <span class="na">journal</span> <span class="p">=</span> <span class="s">{ICML Workshop on Uncertainty and Robustness in Deep Learning}</span><span class="p">,</span>
-  <span class="na">title</span> <span class="p">=</span> <span class="s">{{Beyond First-Order Uncertainty Estimation with Evidential Models for Open-World Recognition}}</span><span class="p">,</span>
-  <span class="na">year</span> <span class="p">=</span> <span class="s">{2021}</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
           </div>
         </div>
